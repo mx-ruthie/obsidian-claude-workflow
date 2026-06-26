@@ -87,6 +87,7 @@ flowchart TD
 | `/eod` | End of day | Catches meetings, arc-of-day summary → `## EOD` + `Career/Shipped.md` |
 | `/log-granola` | After a meeting (optional) | Pulls Granola notes → today's daily note; `/eod` catches any you missed |
 | `/log-shipped` | Anytime | Just writes shipped items to `Career/Shipped.md` |
+| `/my-story` | First Friday of month | Reads career Slack channel + merged PRs, writes next chapter to `Career/My Story.md` |
 
 ---
 
@@ -98,6 +99,7 @@ flowchart TD
 | 3:33pm | Weekdays | Forward anything from Slack worth capturing to your reminders channel |
 | 5:00pm | Weekdays | Run `/eod` in Claude Code |
 | 2:00pm | Fridays | Run `/weekly-wins` in Claude Code |
+| 2:00pm | First Friday of month | Run `/my-story` in Claude Code |
 
 ---
 

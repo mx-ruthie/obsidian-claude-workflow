@@ -6,7 +6,7 @@ A daily note system for engineers using Obsidian + Claude Code. Two commands —
 
 **`/eod`** diffs the day against the morning snapshot, catches any Granola meeting notes you forgot to log, and writes a `## EOD` section with what shipped, what moved, and what's carrying over. It also appends to a running `Career/Shipped.md` log useful for promo prep and interview stories.
 
-Four Slack reminders (9:30am, 3:33pm, 5pm daily + 2pm Fridays) handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
+Five Slack reminders handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
 
 ---
 
@@ -40,12 +40,13 @@ To find your Slack user ID: click your profile picture → Profile → click the
 
 ### 2. Install the skill files
 
-Copy the three files from `skills/` to your Claude Code commands folder:
+Copy the files from `skills/` to your Claude Code commands folder:
 
 ```bash
 cp skills/morning.md ~/.claude/commands/morning.md
 cp skills/eod.md ~/.claude/commands/eod.md
 cp skills/log-shipped.md ~/.claude/commands/log-shipped.md
+cp skills/my-story.md ~/.claude/commands/my-story.md
 ```
 
 ### 3. Add the Obsidian files
@@ -74,6 +75,7 @@ Then set up four recurring cloud agent routines in Claude Code via `/schedule`:
 - **3:33pm weekdays** — send a message asking if there's anything from Slack worth forwarding
 - **5:00pm weekdays** — send a message reminding you to run `/eod`
 - **2:00pm Fridays** — send a message reminding you to run `/weekly-wins`
+- **2:00pm first Friday of each month** — send a message reminding you to run `/my-story`
 
 ---
 
@@ -84,6 +86,7 @@ Then set up four recurring cloud agent routines in Claude Code via `/schedule`:
 3:33pm  Slack nudge → you forward any Slack commitments to your reminders channel
 5:00pm  Slack nudge → you open Claude Code and run /eod → meetings caught up, ## EOD written, Shipped.md updated
 2:00pm  Slack nudge (Fridays only) → you run /weekly-wins → story seeds written to Career/Weekly Wins.md
+2:00pm  Slack nudge (first Friday of month) → you run /my-story → next chapter written to Career/My Story.md
 ```
 
 The reminders are just nudges — automated Slack messages that prompt you to act. The commands themselves are always run manually by you in Claude Code.
