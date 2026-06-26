@@ -6,7 +6,7 @@ A daily note system for engineers using Obsidian + Claude Code. Two commands —
 
 **`/eod`** diffs the day against the morning snapshot, catches any Granola meeting notes you forgot to log, and writes a `## EOD` section with what shipped, what moved, and what's carrying over. It also appends to a running `Career/Shipped.md` log useful for promo prep and interview stories.
 
-Three Slack reminders (9:30am, 3:33pm, 5pm) handle the "remember to do this" problem so you don't have to.
+Three Slack reminders (9:30am, 3:33pm, 5pm) handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
 
 ---
 
@@ -79,10 +79,12 @@ Then set up three recurring cloud agent routines in Claude Code via `/schedule`:
 ## How it works
 
 ```
-9:30am  Slack nudge → run /morning → ## Morning written to today's note
-3:33pm  Slack nudge → forward any Slack commitments to your reminders channel
-5:00pm  Slack nudge → run /eod → meetings caught up, ## EOD written, Shipped.md updated
+9:30am  Slack nudge → you open Claude Code and run /morning → ## Morning written to today's note
+3:33pm  Slack nudge → you forward any Slack commitments to your reminders channel
+5:00pm  Slack nudge → you open Claude Code and run /eod → meetings caught up, ## EOD written, Shipped.md updated
 ```
+
+The reminders are just nudges — automated Slack messages that prompt you to act. The commands themselves are always run manually by you in Claude Code.
 
 The daily note ends up with a frozen arc of the day: what you started with, what moved, where things landed. Open any past note and you'll know exactly what you were juggling that day.
 
