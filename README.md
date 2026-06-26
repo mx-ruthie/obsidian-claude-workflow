@@ -6,7 +6,7 @@ A daily note system for engineers using Obsidian + Claude Code. Two commands —
 
 **`/eod`** diffs the day against the morning snapshot, catches any Granola meeting notes you forgot to log, and writes a `## EOD` section with what shipped, what moved, and what's carrying over. It also appends to a running `Career/Shipped.md` log useful for promo prep and interview stories.
 
-Three Slack reminders (9:30am, 3:33pm, 5pm) handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
+Four Slack reminders (9:30am, 3:33pm, 5pm daily + 2pm Fridays) handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
 
 ---
 
@@ -68,11 +68,12 @@ echo "# Shipped" > "/YOUR_VAULT_PATH/Career/Shipped.md"
 
 Create a private Slack channel for reminders (e.g. `#your-name-reminders`). This is where you'll forward Slack commitments you want to track, and where the automated nudges land.
 
-Then set up three recurring cloud agent routines in Claude Code via `/schedule`:
+Then set up four recurring cloud agent routines in Claude Code via `/schedule`:
 
 - **9:30am weekdays** — send a message to your channel reminding you to run `/morning`
 - **3:33pm weekdays** — send a message asking if there's anything from Slack worth forwarding
 - **5:00pm weekdays** — send a message reminding you to run `/eod`
+- **2:00pm Fridays** — send a message reminding you to run `/weekly-wins`
 
 ---
 
@@ -82,6 +83,7 @@ Then set up three recurring cloud agent routines in Claude Code via `/schedule`:
 9:30am  Slack nudge → you open Claude Code and run /morning → ## Morning written to today's note
 3:33pm  Slack nudge → you forward any Slack commitments to your reminders channel
 5:00pm  Slack nudge → you open Claude Code and run /eod → meetings caught up, ## EOD written, Shipped.md updated
+2:00pm  Slack nudge (Fridays only) → you run /weekly-wins → story seeds written to Career/Weekly Wins.md
 ```
 
 The reminders are just nudges — automated Slack messages that prompt you to act. The commands themselves are always run manually by you in Claude Code.

@@ -92,11 +92,12 @@ flowchart TD
 
 ## Slack reminders (automatic, weekdays)
 
-| Time | Nudge |
-|---|---|
-| 9:30am | Run `/morning` in Claude Code |
-| 3:33pm | Forward anything from Slack worth capturing to your reminders channel |
-| 5:00pm | Run `/eod` in Claude Code |
+| Time | Day | Nudge |
+|---|---|---|
+| 9:30am | Weekdays | Run `/morning` in Claude Code |
+| 3:33pm | Weekdays | Forward anything from Slack worth capturing to your reminders channel |
+| 5:00pm | Weekdays | Run `/eod` in Claude Code |
+| 2:00pm | Fridays | Run `/weekly-wins` in Claude Code |
 
 ---
 
