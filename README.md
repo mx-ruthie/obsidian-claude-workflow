@@ -97,6 +97,34 @@ The `Career/Shipped.md` file accumulates over time — useful for performance re
 
 ---
 
+## Career growth layer
+
+The system includes a monthly command for building a narrative career record — useful for promo packets, performance reviews, and interview prep.
+
+**`Career/My Story.md`** is a narrative document written in third person that chronicles your growth over time. Each chapter covers a few months and reads like an outside perspective on your work — not a bullet list of accomplishments, but a story of what you were figuring out, what you owned, and what changed.
+
+**Your career Slack channel** is the capture layer. When something notable happens — a shoutout, a moment worth remembering, a reflection you want to hold onto — post it there. The channel becomes the raw material `/my-story` reads each month.
+
+**`/my-story`** runs on the first Friday of each month (triggered by a Slack reminder). It reads your career channel posts since the last chapter, pulls your merged PRs from GitHub for the same period, synthesizes themes across both sources, and writes the next chapter. PRs are included because meaningful technical work often goes unposted — they're evidence even when you didn't write about them.
+
+The `Career/Shipped.md` file that `/eod` builds throughout the year feeds into this monthly rhythm: day-to-day entries become chapter-level narrative over time.
+
+To set this up, add the career placeholder to your `skills/my-story.md` replacements:
+
+| Placeholder | Replace with |
+|---|---|
+| `YOUR_CAREER_SLACK_CHANNEL` | Channel ID of your career notes channel in Slack |
+
+Then create the narrative doc in your vault:
+
+```bash
+touch "/YOUR_VAULT_PATH/Career/My Story.md"
+```
+
+Add an initial chapter manually (or ask Claude to write one from your existing career notes), then `/my-story` picks up from there each month.
+
+---
+
 ## Forwarding commitments
 
 When you tell someone "I'll look at that" in Slack, forward the message to your reminders channel. `/morning` reads it the next day and surfaces it in your daily note. No task manager, no copy-pasting — just a forward.
