@@ -1,73 +1,55 @@
-# Adopt this in one sitting (~20 min)
+# Adopt / week one
 
-Goal: `/eod` works tonight. Everything else can wait.
+Most people should **not** start here. Open the repo in your IDE and tell the agent:
 
-## You need
+> Help me set this up for my actual stack.
 
-- [ ] Obsidian vault (any folder of markdown is fine)
-- [ ] Claude Code **or** Cursor with agent slash commands
-- [ ] GitHub CLI (`gh auth status` works) — or plan to strip PR steps later (see [TWEAK.md](TWEAK.md))
-- [ ] Linear MCP connected — or plan to swap ticket tool later
-- [ ] Slack MCP connected (for the commitments channel)
+That path is [`AGENT_SETUP.md`](AGENT_SETUP.md) (agents also read [`../AGENTS.md`](../AGENTS.md)).
 
-Optional later: Granola (meetings), Notion (`/log-this`), career Slack channel (`/my-story`)
+This page is the human checklist for *after* install: smoke test + week-1 habit.
 
-## Steps
+---
 
-1. **Clone this repo**
-   ```bash
-   git clone https://github.com/mx-ruthie/obsidian-claude-workflow.git
-   cd obsidian-claude-workflow
-   ```
+## After your agent finishes install
 
-2. **Fill in config**
-   ```bash
-   cp config.example.env config.env
-   # edit config.env — vault path, Linear email, Slack channel + user IDs
-   ```
+### Smoke test tonight
 
-   Find Slack IDs: open channel → About → bottom for channel ID; profile → `...` → Copy member ID.
+- [ ] Run `/eod` in Claude Code or Cursor
+- [ ] Today’s daily note has `## EOD`
+- [ ] Next workday note has `## Focus` + `## Morning`
+- [ ] You know which `VERSION` you installed
 
-3. **Install**
-   ```bash
-   chmod +x scripts/install.sh
-   ./scripts/install.sh
-   ```
+### One reminder
 
-   This copies substituted skills into `~/.claude/commands` and/or `~/.cursor/commands`, and creates vault starter files **only if missing**.
+Weekdays ~5pm: `Run /eod`. Skip morning nudges.
 
-4. **Create the Slack channel** if it doesn't exist (private is fine). Forward one test message to it.
-
-5. **Set one reminder** — weekday ~5pm: “Run `/eod`”. Nothing else required.
-
-6. **Smoke test tonight**
-   - Open Claude Code or Cursor
-   - Run `/eod`
-   - Confirm today's note got `## EOD` and tomorrow (or Monday) got `## Focus` + `## Morning`
-
-## Week 1 habit
+### Week 1 habit
 
 | Day | Do this |
 |---|---|
 | Each work evening | Run `/eod` when the nudge hits |
-| During day | Forward Slack yeses to your reminders channel |
+| During day | Capture commitments the way you configured (often: forward Slack yeses) |
 | Morning | Open the seeded note; set Focus; glance |
 | Friday (optional) | Say yes when `/eod` asks about weekly wins |
 
-Skip Growth/Revise, Weekly Wins, and My Story until the evening ritual feels boringly reliable.
+Skip Weekly Wins / My Story until the evening ritual feels boringly reliable.
+
+---
 
 ## If something fails
 
 | Symptom | Likely fix |
 |---|---|
-| Skill writes to wrong path | Re-check `YOUR_VAULT_PATH` in `config.env`, re-run install |
-| No tickets | Linear MCP auth / email mismatch |
-| No PRs | `gh auth login` for the right account |
-| Commitments empty | Wrong channel/user ID, or you didn't forward anything |
-| Meetings skipped | Expected if Granola isn't configured |
+| Skill writes to wrong path | Re-check `YOUR_VAULT_PATH` in `config.env`, re-run install (or ask your agent) |
+| No tickets | Ticket MCP / email mismatch — or you stripped tickets and that’s fine |
+| No PRs | `gh auth login` — or you stripped PRs |
+| Commitments empty | Wrong Slack IDs, or you chose a non-Slack capture and haven’t used it yet |
+| Meetings skipped | Expected without Granola (or your meeting tool) |
+
+---
 
 ## Next reading
 
-- [SHARE.md](SHARE.md) — why the system is shaped this way (good to soft-share with a curious teammate)
-- [TWEAK.md](TWEAK.md) — swap Linear/GitHub/Slack/Granola; change what “shipped” means
-- `../obsidian/Daily Workflow.md` — operator's cheat sheet once it's in your vault
+- [SHARE.md](SHARE.md) — why it’s shaped this way  
+- [TWEAK.md](TWEAK.md) — change adapters later  
+- Vault `Daily Workflow.md` — operator cheat sheet once installed

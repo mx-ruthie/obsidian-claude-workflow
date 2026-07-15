@@ -4,27 +4,67 @@ One evening ritual — `/eod` — that closes today and seeds tomorrow in Obsidi
 
 Morning is a **glance**, not a command. `/morning` exists only as catch-up when you skip a night.
 
-Built for Claude Code or Cursor. ADHD-aware: if it requires remembering without a nudge, it won't stick — so Slack reminds you once at ~5pm, and the skill does the blank-page work.
+Built for Claude Code or Cursor. ADHD-aware: one ~5pm nudge; the skill does the blank-page work.
+
+**Version:** see [`VERSION`](VERSION) (currently dated in that file).
 
 ---
 
-## Quick start (adopter)
+## Fastest path: hand the repo to your AI
+
+You do **not** need to follow a long manual checklist. Expected use:
+
+1. Clone or download this repo (or open it in your IDE).
+2. Tell your IDE agent something like:
+
+> Help me set up this repo for my actual stack. Adapt the skills to the tools I use. Ask me anything you need, then install the commands.
+
+3. Answer its questions (vault path, Linear vs Jira, Slack or not, Claude vs Cursor, etc.).
+4. Tonight: run `/eod` once.
+
+Agents reading this repo should follow **[`AGENTS.md`](AGENTS.md)** → **[`docs/AGENT_SETUP.md`](docs/AGENT_SETUP.md)** and fork adapters per **[`docs/TWEAK.md`](docs/TWEAK.md)**.
+
+### Example prompts to paste
+
+```text
+Open this repo and set it up for me. I use Cursor, Obsidian at <path>, Jira not Linear,
+GitHub PRs, and I want a private Slack reminders channel. Skip Granola for now.
+```
+
+```text
+Install obsidian-claude-workflow for Claude Code. I don't use Slack MCP —
+capture commitments in the daily note instead. Keep Growth/Revise.
+```
+
+```text
+Diff my installed /eod against this repo and tell me what's drifted.
+```
+
+---
+
+## Manual install (if you prefer)
 
 ```bash
 git clone https://github.com/mx-ruthie/obsidian-claude-workflow.git
 cd obsidian-claude-workflow
-cp config.example.env config.env   # fill in vault path, Linear email, Slack IDs
-chmod +x scripts/install.sh
-./scripts/install.sh
+cp config.example.env config.env   # fill in
+chmod +x scripts/install.sh && ./scripts/install.sh
 ```
 
-Then set **one** weekday Slack reminder (~5pm): `Run /eod`.
+Then one weekday ~5pm nudge: `Run /eod`.
 
-Tonight, run `/eod` once. Tomorrow morning, open the seeded daily note.
+---
 
-Full checklist + smoke test: **[docs/ADOPT.md](docs/ADOPT.md)**  
-Why it's shaped this way (shareable): **[docs/SHARE.md](docs/SHARE.md)**  
-Fork for Jira / GitLab / no Slack / etc.: **[docs/TWEAK.md](docs/TWEAK.md)**
+## Docs map
+
+| Doc | Who it's for |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | IDE agents — start here when asked to install/adapt |
+| [`docs/AGENT_SETUP.md`](docs/AGENT_SETUP.md) | Full agent brief (also pasteable) |
+| [`docs/SHARE.md`](docs/SHARE.md) | Human: why the system is shaped this way |
+| [`docs/ADOPT.md`](docs/ADOPT.md) | Human: week-1 habit + smoke test |
+| [`docs/TWEAK.md`](docs/TWEAK.md) | Human + agent: swap adapters |
+| [`VERSION`](VERSION) | Release date + maintainer sync notes |
 
 ---
 
@@ -39,7 +79,7 @@ Fork for Jira / GitLab / no Slack / etc.: **[docs/TWEAK.md](docs/TWEAK.md)**
 | `/weekly-wins` | Friday story seeds from Shipped + growth crumbs |
 | `/my-story` | Monthly narrative chapter from career channel + evidence |
 
-Obsidian starters (`Daily Workflow.md`, `Today.md`, templates for daily notes / Shipped / Weekly Wins / My Story) install into your vault **only if those files don't already exist**.
+Obsidian starters install into your vault **only if those files don't already exist**.
 
 ---
 
@@ -48,26 +88,22 @@ Obsidian starters (`Daily Workflow.md`, `Today.md`, templates for daily notes / 
 ```
 Last night's /eod  →  tomorrow already has Focus + Morning
 Morning            →  open note, set Focus, glance
-During day         →  forward Slack yeses; optional /log-this
+During day         →  forward Slack yeses (or your capture habit); optional /log-this
 ~5pm               →  /eod once
 ```
 
 ---
 
-## Prerequisites
+## Prerequisites (defaults — your AI should adapt)
 
-**Required for full default skills**
-- Obsidian (or any markdown vault with the same folder names)
-- Claude Code and/or Cursor
-- `gh` authenticated
-- Linear MCP + Slack MCP
+**Common default stack in the skill files**
+- Obsidian-style markdown vault
+- `gh` + Linear MCP + Slack MCP
 
 **Optional**
-- Granola MCP (meeting catch-up in `/eod`)
-- Notion MCP (`/log-this` for Notion URLs)
-- Career Slack channel (`/my-story` + Friday prompt)
+- Granola, Notion MCP, career Slack channel
 
-If your stack differs, install anyway, then edit adapters — see [docs/TWEAK.md](docs/TWEAK.md).
+Missing pieces are fine — tell the agent what to strip or swap ([`docs/TWEAK.md`](docs/TWEAK.md)).
 
 ---
 
@@ -76,54 +112,41 @@ If your stack differs, install anyway, then edit adapters — see [docs/TWEAK.md
 | Placeholder | Meaning |
 |---|---|
 | `YOUR_VAULT_PATH` | Absolute path to vault (no trailing slash) |
-| `YOUR_LINEAR_EMAIL` | Linear account email |
+| `YOUR_LINEAR_EMAIL` | Linear account email (or unused if forked away) |
 | `YOUR_REMINDERS_CHANNEL` | e.g. `#your-name-reminders` |
 | `YOUR_SLACK_CHANNEL_ID` | Channel ID |
 | `YOUR_SLACK_USER_ID` | Your Slack member ID |
-| `YOUR_CAREER_SLACK_CHANNEL` | Optional career moments channel name |
-| `YOUR_CAREER_SLACK_CHANNEL_ID` | Optional channel ID |
+| `YOUR_CAREER_SLACK_CHANNEL` | Optional |
+| `YOUR_CAREER_SLACK_CHANNEL_ID` | Optional |
 
-`scripts/install.sh` reads `config.env` and substitutes these into the skill files before copying them to `~/.claude/commands` and/or `~/.cursor/commands`.
-
----
-
-## Forwarding commitments
-
-When you say “I’ll look at that” in Slack, forward the message to your reminders channel. `/eod` that evening sweeps it into next workday’s Morning. No task manager required.
-
-Catch-up is built for skipped days: since the last note with `## EOD` or `## Morning`, or the last 5 calendar days if you went dark — not “today only.”
+`scripts/install.sh` substitutes these into skills before copying to `~/.claude/commands` and/or `~/.cursor/commands`.
 
 ---
 
-## Career growth layer (optional)
+## Maintainer: keep the public skills honest
 
-```
-Daily Growth/Revise crumbs  →  /weekly-wins story seeds  →  /my-story chapters
-         ↑                              ↑
-   Career Slack moments           Shipped.md trail
+```bash
+./scripts/check-drift.sh      # local Cursor commands vs skills/ (normalized)
+./scripts/sync-from-local.sh  # re-sanitize local → skills/, bump VERSION date
 ```
 
-Nothing auto-posts. `/eod` only **asks** on Fri/Mon whether to run weekly wins / my-story.
+See [`VERSION`](VERSION) for details.
 
 ---
 
 ## Design decisions
 
-Kept small on purpose. Rejected:
-- Live-updating dashboard (destroys the historical arc)
-- Required morning command (reminder fatigue killed the baseline)
-- Calendar MCP (faster to glance)
-- Auto-capturing every agent session (low signal)
+Kept small on purpose. Rejected: live dashboards, required morning commands, calendar MCP, auto-capturing every agent session.
 
-**July 2026 redesign:** one evening ritual. Seed tomorrow at closeout. Morning nudge deleted.
+**July 2026:** one evening ritual. Seed tomorrow at closeout. Morning nudge deleted.
 
 ---
 
-## Sharing this with a teammate
+## Sharing with a teammate
 
-1. Send [docs/SHARE.md](docs/SHARE.md) (or paste into Notion).  
-2. Point them at [docs/ADOPT.md](docs/ADOPT.md).  
-3. Let them fork adapters via [docs/TWEAK.md](docs/TWEAK.md) — don’t hand them your private `config.env` or vault.
+1. Send the repo link (or [`docs/SHARE.md`](docs/SHARE.md)).
+2. Tell them: *open it in your IDE and ask the agent to set it up for your stack.*
+3. Don’t share your private `config.env` or vault.
 
 ---
 

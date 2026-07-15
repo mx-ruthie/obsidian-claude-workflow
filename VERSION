@@ -1,0 +1,28 @@
+2026-07-15
+
+# Version / sync
+
+`VERSION` is the release date of the **shareable** skills in this repo.
+
+## Maintainer sync (author of this repo)
+
+Private source of truth (may contain personal paths/IDs):
+- `~/.cursor/commands/eod.md` (and sibling commands)
+- Optionally `~/.claude/commands/` if that copy leads
+
+Published skills live in `skills/` with `YOUR_*` placeholders.
+
+```bash
+# See whether local Cursor commands drifted from published skills
+./scripts/check-drift.sh
+
+# Re-sanitize from local Cursor commands into skills/ (review the diff!)
+./scripts/sync-from-local.sh
+# then bump VERSION date + commit
+```
+
+`check-drift.sh` normalizes personal vault paths, email, and Slack IDs to placeholders before diffing, so noise is mostly real instruction changes.
+
+## Adopter
+
+After `./scripts/install.sh`, your installed commands are a snapshot of this `VERSION`. Re-pull + re-run install to upgrade. Your `config.env` is not overwritten by git.
