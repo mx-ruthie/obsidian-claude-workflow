@@ -125,6 +125,8 @@ Look for **judgment**, not output volume. One honest line beats a polished parag
 
 **Loop:** EOD crumb → Weekly Wins → monthly My Story. Forward praise and ownership moments to your career channel when they happen.
 
+Full wiring guide (for you or your IDE agent): if this repo is still nearby, see `docs/CAREER.md` in [obsidian-claude-workflow](https://github.com/mx-ruthie/obsidian-claude-workflow).
+
 ---
 
 ## Redesign note (why one ritual)

@@ -43,7 +43,7 @@ Weekly-only is honest: run a weekly close that writes shipped + seeds next Monda
 Skills use `DD-MM-YYYY.md`. Search/replace the path pattern if your vault uses `YYYY-MM-DD`.
 
 ### “No career narrative yet”
-Leave `YOUR_CAREER_SLACK_CHANNEL` blank. `/eod` will skip the Friday career ask if you also remove Part C step 13. Keep `/weekly-wins` — it only needs Shipped + daily crumbs.
+See [CAREER.md](CAREER.md). Minimum: keep Layer 1 (`Shipped.md`). Leave `YOUR_CAREER_SLACK_CHANNEL` blank and skip `/my-story` until you want Chapters. Keep `/weekly-wins` if you want story seeds from Shipped + Growth crumbs only.
 
 ## Edit order that hurts least
 

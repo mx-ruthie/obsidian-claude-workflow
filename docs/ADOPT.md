@@ -32,7 +32,7 @@ Weekdays ~5pm: `Run /eod`. Skip morning nudges.
 | Morning | Open the seeded note; set Focus; glance |
 | Friday (optional) | Say yes when `/eod` asks about weekly wins |
 
-Skip Weekly Wins / My Story until the evening ritual feels boringly reliable.
+Skip Weekly Wins / My Story until the evening ritual feels boringly reliable. When you’re ready, wire them via [CAREER.md](CAREER.md) (or ask your agent to).
 
 ---
 

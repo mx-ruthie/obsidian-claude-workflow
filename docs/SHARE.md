@@ -65,6 +65,16 @@ Add MCP / GitHub / Slack when the blank-page tax at 5pm is the actual pain.
 
 ---
 
+## Career growth (optional layer on the same trail)
+
+Daily closeout can compound into promo/review material if you wire it on purpose:
+
+`Shipped.md` + optional Growth/Revise → `/weekly-wins` → `/my-story` (± a private career Slack for moments that aren’t tickets).
+
+Prompts only — nothing auto-publishes. Full wiring guide: [CAREER.md](CAREER.md).
+
+---
+
 ## What this is not
 
 - Not a second-brain encyclopedia  
@@ -76,4 +86,4 @@ Add MCP / GitHub / Slack when the blank-page tax at 5pm is the actual pain.
 
 ## Implement it
 
-See [ADOPT.md](ADOPT.md) for the install checklist, and [TWEAK.md](TWEAK.md) for stack forks.
+Hand the repo to your IDE agent, or see [ADOPT.md](ADOPT.md). Stack forks: [TWEAK.md](TWEAK.md). Career trail: [CAREER.md](CAREER.md).

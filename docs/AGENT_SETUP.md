@@ -31,7 +31,8 @@ Read in the clone (after you have it):
 | `gh` auth | If broken, still install; note that PR sections will be empty until fixed — or strip PR gather steps per TWEAK.md if I say I don’t use GitHub PRs |
 | Linear MCP | If I don’t use Linear, ask what ticket tool I use (or none) and adapt skills per TWEAK.md before install |
 | Slack MCP | If I don’t want Slack commitments, leave reminders placeholders as `UNUSED` and remove Slack steps from skills per TWEAK.md before install |
-| Granola / Notion / career channel | Optional — skip unless I say I want them |
+| Granola / Notion | Optional — skip unless I say I want them |
+| Career growth (Shipped → Weekly Wins → My Story ± career Slack) | **Ask.** Default Layer 1 (Shipped) on; wire Layers 2–5 per `docs/CAREER.md` if I want promo/review trail |
 
 ### Steps (do these)
 
@@ -41,18 +42,20 @@ Read in the clone (after you have it):
    - Install target: Claude / Cursor / both
    - Linear email (or “no Linear — use X / none”)
    - Reminders Slack channel name + channel ID + my Slack user ID (or “skip Slack”)
-   - Optional career Slack channel name + ID
+   - Whether I want career growth tracking beyond Shipped (see `docs/CAREER.md`) — if yes: Weekly Wins? My Story? career Slack channel name + ID?
    - Anything to strip up front (no PRs, no meetings, Jira instead of Linear, etc.)
 3. Create `config.env` from `config.example.env` with my answers.
 4. If I asked for stack forks, edit files under `skills/` **before** running install (placeholders stay as `YOUR_*` until install substitutes them). Common forks are in `docs/TWEAK.md`.
-5. Run `chmod +x scripts/install.sh && ./scripts/install.sh`.
-6. Confirm the substituted command files landed under `~/.claude/commands` and/or `~/.cursor/commands` and that vault starter files exist (don’t overwrite existing Career notes).
-7. Tell me:
+5. If I opted into career tracking, follow `docs/CAREER.md` (templates, career channel placeholders, Chapter 1 stub handling, which Part C prompts stay enabled).
+6. Run `chmod +x scripts/install.sh && ./scripts/install.sh`.
+7. Confirm the substituted command files landed under `~/.claude/commands` and/or `~/.cursor/commands` and that vault starter files exist (don’t overwrite existing Career notes).
+8. Tell me:
    - Exact command to run tonight: `/eod`
    - What “success” looks like (today’s note has `## EOD`; next workday has `## Focus` + `## Morning`)
    - To set **one** weekday ~5pm nudge: `Run /eod`
+   - Which career layers are enabled vs deferred (from `docs/CAREER.md`)
    - The installed `VERSION` string so I know what I have
-8. Stop. Do not run `/eod` for me unless I ask. Do not post to Slack. Do not invent focus from tickets.
+9. Stop. Do not run `/eod` for me unless I ask. Do not post to Slack. Do not invent focus from tickets.
 
 ### Success criteria
 

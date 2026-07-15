@@ -40,6 +40,11 @@ capture commitments in the daily note instead. Keep Growth/Revise.
 Diff my installed /eod against this repo and tell me what's drifted.
 ```
 
+```text
+Also wire up career growth tracking — Shipped, Weekly Wins, My Story,
+and a private Slack channel for career moments. Follow docs/CAREER.md.
+```
+
 ---
 
 ## Manual install (if you prefer)
@@ -62,6 +67,7 @@ Then one weekday ~5pm nudge: `Run /eod`.
 | [`AGENTS.md`](AGENTS.md) | IDE agents — start here when asked to install/adapt |
 | [`docs/AGENT_SETUP.md`](docs/AGENT_SETUP.md) | Full agent brief (also pasteable) |
 | [`docs/SHARE.md`](docs/SHARE.md) | Human: why the system is shaped this way |
+| [`docs/CAREER.md`](docs/CAREER.md) | Wire Shipped → Weekly Wins → My Story (± career Slack) |
 | [`docs/ADOPT.md`](docs/ADOPT.md) | Human: week-1 habit + smoke test |
 | [`docs/TWEAK.md`](docs/TWEAK.md) | Human + agent: swap adapters |
 | [`VERSION`](VERSION) | Release date + maintainer sync notes |
