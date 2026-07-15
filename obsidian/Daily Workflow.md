@@ -8,40 +8,38 @@
 
 ```mermaid
 flowchart TD
-    A([🌅 Start of day]) --> B[Slack nudge at 9:30am\nOpen Claude Code]
-    B --> C[Run /morning\n## Morning appears in today's note]
-    C --> D[Glance at Morning section:\ntickets · PRs · review requests · commitments]
+    A([Start of day]) --> B[Open today's note\nFocus + Morning already seeded]
+    B --> C[Set Focus if needed\nglance commitments · tickets · PRs]
 
-    D --> E{During the day}
+    C --> D{During the day}
 
-    E --> F[Finished a meeting?]
-    F --> G[Open Claude Code\nRun: /log-granola\nor ask Claude to pull Granola notes]
-    G --> H[Meeting lands in\n## Meetings]
+    D --> E[Finished a meeting?]
+    E --> F[Optional: log it now\nor let /eod catch it]
+    F --> G[Meeting lands in\n## Meetings]
 
-    E --> I[Saw a useful link\nor ticket worth noting?]
-    I --> J[Open Claude Code\nRun: /log-this url-or-ticket-id]
-    J --> K[Link lands in\n## Docs & Decisions]
+    D --> H[Saw a useful\ndoc or ticket?]
+    H --> I[/log-this url-or-ticket-id]
+    I --> J[Link lands in\n## Docs & Decisions]
 
-    E --> L[Slack commitment\nyou want to track?]
-    L --> M[Forward message to\nyour reminders channel\nShows up tomorrow morning]
+    D --> K[Slack commitment\nyou want to track?]
+    K --> L[Forward message to\nyour reminders channel\n/eod picks it up tonight]
 
-    D --> N([🌇 End of day])
-    N --> O[Slack nudge at 5:00pm\nOpen Claude Code]
-    O --> P[Run /eod]
-    P --> Q[Meetings caught up\n## EOD appended to today's note\nShipped items → Career/Shipped.md]
-    Q --> R[Update Remember & Action Items\nfor tomorrow]
+    C --> M([End of day])
+    M --> N[Slack nudge ~5pm\nOpen Claude Code or Cursor]
+    N --> O[Run /eod]
+    O --> P[## EOD on today\nShipped → Career/Shipped.md]
+    O --> Q[Next workday note seeded\n## Focus + ## Morning]
 ```
 
 ---
 
-## Morning (2 min)
+## Morning (glance only — no command)
 
-- [ ] Slack nudge arrives at 9:30am → open Claude Code
-- [ ] Run `/morning` — pulls into today's note automatically:
-  - In-progress tickets (Linear)
-  - Your open PRs + review state
-  - PRs where your review is requested
-  - Anything you forwarded to your reminders channel
+- [ ] Open today's daily note — `/eod` last night already wrote `## Focus` + `## Morning`
+- [ ] Set Focus if the placeholder is still there
+- [ ] Glance: commitments · tickets · PRs · reviews waiting on you
+
+If the note has no `## Morning` (skipped EOD): run `/morning` once as catch-up.
 
 ---
 
@@ -49,22 +47,33 @@ flowchart TD
 
 | When this happens | Do this | Where it lands |
 |---|---|---|
-| Meeting ends | Open Claude Code → `/log-granola` (optional) | `## Meetings` in today's note |
-| You open a useful doc or ticket | Open Claude Code → `/log-this [url]` | `## Docs & Decisions` in today's note |
-| You made a commitment in Slack | Forward the message to your reminders channel | Shows up in tomorrow's `/morning` |
-| Quick thought / reminder | Drop it in `## Remember & Action Items` | Today's note |
+| Meeting ends | Log it now — or skip and let `/eod` catch it | `## Meetings` in today's note |
+| Useful Notion/doc URL | `/log-this [url]` | `## Docs & Decisions` |
+| Ticket worth noting | `/log-this [TICKET-ID]` | `## Docs & Decisions` |
+| Slack commitment | Forward to your reminders channel | Tonight's `/eod` → tomorrow's Morning |
+| Quick thought | Drop it under `## Remember & Action Items` | Today's note |
 
 ---
 
-## End of day (5 min)
+## End of day (the one ritual)
 
-- [ ] Slack nudge arrives at 5:00pm → open Claude Code
+- [ ] Nudge at ~5pm → open Claude Code or Cursor
 - [ ] Run `/eod`
-  - Catches any Granola meeting notes you didn't log during the day
-  - Diffs current state against your morning snapshot
-  - Appends `## EOD` to today's note (what shipped, what moved, what's carrying over)
+  - Catches meeting notes you didn't log (if a meeting MCP is configured)
+  - Diffs against the Morning baseline (seeded last night, or catch-up `/morning`)
+  - Appends `## EOD` — including optional **Growth** / **Revise** lines
   - Writes shipped items to `Career/Shipped.md`
-- [ ] Update **Remember & Action Items** — what needs to carry to tomorrow?
+  - **Seeds next workday** (Fri/Sat/Sun → Monday) with Focus + Morning
+  - Slack catch-up is automatic since last `## EOD` or `## Morning` (or last 5 days if you went dark)
+  - Prompts (Fri/Mon as relevant): `/weekly-wins`, `/my-story`, career-channel — say yes/no; nothing auto-runs
+
+---
+
+## Weekly (Fridays, ~15 min)
+
+- [ ] Run `/weekly-wins` → review story seeds *(or say yes when `/eod` prompts)*
+- [ ] Skim `Career/Shipped.md`
+- [ ] Clear your reading / links queue if you keep one
 
 ---
 
@@ -75,32 +84,61 @@ flowchart TD
 | Daily notes | `Daily notes/` |
 | Meeting notes | Inside daily note → `## Meetings` |
 | Shipped work log | `Career/Shipped.md` |
-| Reading queue | `Links I want to read.md` |
+| Weekly story seeds | `Career/Weekly Wins.md` |
+| Career narrative | `Career/My Story.md` |
+| Templates | `Templates/` |
 
 ---
 
-## Claude Code commands
+## Commands
 
 | Command | When to run | What it does |
 |---|---|---|
-| `/morning` | Start of day | Pulls tickets + PRs + Slack forwards → `## Morning` in today's note |
-| `/eod` | End of day | Catches meetings, arc-of-day summary → `## EOD` + `Career/Shipped.md` |
-| `/log-granola` | After a meeting (optional) | Pulls Granola notes → today's daily note; `/eod` catches any you missed |
-| `/log-shipped` | Anytime | Just writes shipped items to `Career/Shipped.md` |
-| `/my-story` | First Friday of month | Reads career Slack channel + merged PRs, writes next chapter to `Career/My Story.md` |
+| `/eod` | End of day — **the daily ritual** | Closes today + optional Growth/Revise + seeds next workday + prompts for weekly/monthly |
+| `/morning` | Only if today's Morning is missing | Catch-up orientation; no-op if already seeded |
+| `/log-this [url or ticket]` | Anytime | Pulls Notion/Linear context → today's note |
+| `/log-shipped` | Anytime | Writes shipped items to `Career/Shipped.md` |
+| `/weekly-wins` | Fridays (or when `/eod` prompts) | Story seeds from Shipped + Learning / Growth / Revise |
+| `/my-story` | First Friday (or when `/eod` prompts) | Chapter from career channel + PRs + Weekly Wins + crumbs |
 
 ---
 
-## Slack reminders (automatic, weekdays)
+## Slack reminders (keep these lean)
 
-| Time | Day | Nudge |
-|---|---|---|
-| 9:30am | Weekdays | Run `/morning` in Claude Code |
-| 3:33pm | Weekdays | Forward anything from Slack worth capturing to your reminders channel |
-| 5:00pm | Weekdays | Run `/eod` in Claude Code |
-| 2:00pm | Fridays | Run `/weekly-wins` in Claude Code |
-| 2:00pm | First Friday of month | Run `/my-story` in Claude Code |
+| When | Nudge |
+|---|---|
+| Weekdays ~5pm | Run `/eod` |
+| Fridays ~2pm (optional) | Run `/weekly-wins` |
+| First Friday ~2pm (optional) | Run `/my-story` |
+
+Skip a morning nudge. Morning is a glance, not a ceremony.
 
 ---
 
-*You don't have to do all of this every day. Even just `/eod` at the end of the day builds the trail over time.*
+## Growth lens (optional)
+
+Look for **judgment**, not output volume. One honest line beats a polished paragraph.
+
+**Growth:** caught a reviewer's concern early; refused a band-aid; enabled someone else; held two true things at once; course-corrected in public.
+
+**Revise:** same papercut deferred 3+ times; shipped something you can't explain at a boundary that mattered; let noise beat Focus; scope creep burned the day.
+
+**Loop:** EOD crumb → Weekly Wins → monthly My Story. Forward praise and ownership moments to your career channel when they happen.
+
+---
+
+## Redesign note (why one ritual)
+
+Two daily commands (morning + evening) failed in practice — morning nudges became noise, the command didn't run, reminders piled up, and EOD lost its baseline.
+
+**New shape:** one evening ritual. `/eod` closes today *and* writes tomorrow's orientation. `/morning` stays only as catch-up.
+
+Still true:
+- Orientation over journaling
+- Daily notes are historical (`## Morning` start-of-arc, `## EOD` end-of-arc), not a live dashboard
+- Slack commitments via forwarding
+- Calendar: glance yourself (no calendar MCP required)
+
+---
+
+*You don't have to be perfect. Even just `/eod` most evenings builds the trail.*

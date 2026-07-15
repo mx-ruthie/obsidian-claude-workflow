@@ -1,143 +1,130 @@
 # obsidian-claude-workflow
 
-A daily note system for engineers using Obsidian + Claude Code. Two commands — `/morning` and `/eod` — triggered by Slack reminders, that together build a timestamped arc of each workday.
+One evening ritual — `/eod` — that closes today and seeds tomorrow in Obsidian.
 
-**`/morning`** pulls your in-progress tickets, open PRs, review requests, and anything you've forwarded to a private Slack channel as a commitment. It writes a `## Morning` section to today's Obsidian daily note so you open it already oriented.
+Morning is a **glance**, not a command. `/morning` exists only as catch-up when you skip a night.
 
-**`/eod`** diffs the day against the morning snapshot, catches any Granola meeting notes you forgot to log, and writes a `## EOD` section with what shipped, what moved, and what's carrying over. It also appends to a running `Career/Shipped.md` log useful for promo prep and interview stories.
+Built for Claude Code or Cursor. ADHD-aware: if it requires remembering without a nudge, it won't stick — so Slack reminds you once at ~5pm, and the skill does the blank-page work.
 
-Five Slack reminders handle the "remember to do this" problem. They don't run the commands for you — they just nudge you to open Claude Code and run them yourself.
+---
+
+## Quick start (adopter)
+
+```bash
+git clone https://github.com/mx-ruthie/obsidian-claude-workflow.git
+cd obsidian-claude-workflow
+cp config.example.env config.env   # fill in vault path, Linear email, Slack IDs
+chmod +x scripts/install.sh
+./scripts/install.sh
+```
+
+Then set **one** weekday Slack reminder (~5pm): `Run /eod`.
+
+Tonight, run `/eod` once. Tomorrow morning, open the seeded daily note.
+
+Full checklist + smoke test: **[docs/ADOPT.md](docs/ADOPT.md)**  
+Why it's shaped this way (shareable): **[docs/SHARE.md](docs/SHARE.md)**  
+Fork for Jira / GitLab / no Slack / etc.: **[docs/TWEAK.md](docs/TWEAK.md)**
+
+---
+
+## What you get
+
+| Command | Role |
+|---|---|
+| `/eod` | **The daily ritual** — close today, optional Growth/Revise, update `Shipped.md`, seed next workday, prompt (don't auto-run) weekly/monthly |
+| `/morning` | Catch-up only if today's Morning is missing |
+| `/log-this` | Drop a Notion/Linear link into today's note |
+| `/log-shipped` | Write shipped items without a full EOD |
+| `/weekly-wins` | Friday story seeds from Shipped + growth crumbs |
+| `/my-story` | Monthly narrative chapter from career channel + evidence |
+
+Obsidian starters (`Daily Workflow.md`, `Today.md`, templates for daily notes / Shipped / Weekly Wins / My Story) install into your vault **only if those files don't already exist**.
+
+---
+
+## Shape of a day
+
+```
+Last night's /eod  →  tomorrow already has Focus + Morning
+Morning            →  open note, set Focus, glance
+During day         →  forward Slack yeses; optional /log-this
+~5pm               →  /eod once
+```
 
 ---
 
 ## Prerequisites
 
-- [Claude Code](https://claude.ai/code) with the following MCP servers connected:
-  - **Linear** — for ticket state
-  - **Slack** — for reading your reminders channel
-  - **Granola** — for meeting notes (used by `/eod`)
-- **GitHub CLI** (`gh`) — authenticated
-- **Obsidian** — with a `Daily notes/` folder and a `Career/Shipped.md` file
+**Required for full default skills**
+- Obsidian (or any markdown vault with the same folder names)
+- Claude Code and/or Cursor
+- `gh` authenticated
+- Linear MCP + Slack MCP
+
+**Optional**
+- Granola MCP (meeting catch-up in `/eod`)
+- Notion MCP (`/log-this` for Notion URLs)
+- Career Slack channel (`/my-story` + Friday prompt)
+
+If your stack differs, install anyway, then edit adapters — see [docs/TWEAK.md](docs/TWEAK.md).
 
 ---
 
-## Setup
+## Config placeholders
 
-### 1. Replace placeholders
-
-Search the `skills/` folder for these four strings and replace with your own values:
-
-| Placeholder | Replace with |
+| Placeholder | Meaning |
 |---|---|
-| `YOUR_VAULT_PATH` | Absolute path to your Obsidian vault (e.g. `/Users/you/Notes`) |
-| `YOUR_LINEAR_EMAIL` | Your Linear account email |
-| `YOUR_SLACK_CHANNEL_ID` | Channel ID of your private reminders channel in Slack |
-| `YOUR_SLACK_USER_ID` | Your Slack user ID |
+| `YOUR_VAULT_PATH` | Absolute path to vault (no trailing slash) |
+| `YOUR_LINEAR_EMAIL` | Linear account email |
+| `YOUR_REMINDERS_CHANNEL` | e.g. `#your-name-reminders` |
+| `YOUR_SLACK_CHANNEL_ID` | Channel ID |
+| `YOUR_SLACK_USER_ID` | Your Slack member ID |
+| `YOUR_CAREER_SLACK_CHANNEL` | Optional career moments channel name |
+| `YOUR_CAREER_SLACK_CHANNEL_ID` | Optional channel ID |
 
-To find your Slack channel ID: open the channel in Slack → click the channel name → scroll to the bottom of the About panel.
-
-To find your Slack user ID: click your profile picture → Profile → click the `...` menu → Copy member ID.
-
-### 2. Install the skill files
-
-Copy the files from `skills/` to your Claude Code commands folder:
-
-```bash
-cp skills/morning.md ~/.claude/commands/morning.md
-cp skills/eod.md ~/.claude/commands/eod.md
-cp skills/log-shipped.md ~/.claude/commands/log-shipped.md
-cp skills/my-story.md ~/.claude/commands/my-story.md
-```
-
-### 3. Add the Obsidian files
-
-Copy the two files from `obsidian/` into the root of your Obsidian vault:
-
-```bash
-cp "obsidian/Today.md" "/YOUR_VAULT_PATH/Today.md"
-cp "obsidian/Daily Workflow.md" "/YOUR_VAULT_PATH/Daily Workflow.md"
-```
-
-Also create a `Career/Shipped.md` file in your vault if you don't have one:
-
-```bash
-mkdir -p "/YOUR_VAULT_PATH/Career"
-echo "# Shipped" > "/YOUR_VAULT_PATH/Career/Shipped.md"
-```
-
-### 4. Set up Slack reminders
-
-Create a private Slack channel for reminders (e.g. `#your-name-reminders`). This is where you'll forward Slack commitments you want to track, and where the automated nudges land.
-
-Then set up four recurring cloud agent routines in Claude Code via `/schedule`:
-
-- **9:30am weekdays** — send a message to your channel reminding you to run `/morning`
-- **3:33pm weekdays** — send a message asking if there's anything from Slack worth forwarding
-- **5:00pm weekdays** — send a message reminding you to run `/eod`
-- **2:00pm Fridays** — send a message reminding you to run `/weekly-wins`
-- **2:00pm first Friday of each month** — send a message reminding you to run `/my-story`
-
----
-
-## How it works
-
-```
-9:30am  Slack nudge → you open Claude Code and run /morning → ## Morning written to today's note
-3:33pm  Slack nudge → you forward any Slack commitments to your reminders channel
-5:00pm  Slack nudge → you open Claude Code and run /eod → meetings caught up, ## EOD written, Shipped.md updated
-2:00pm  Slack nudge (Fridays only) → you run /weekly-wins → story seeds written to Career/Weekly Wins.md
-2:00pm  Slack nudge (first Friday of month) → you run /my-story → next chapter written to Career/My Story.md
-```
-
-The reminders are just nudges — automated Slack messages that prompt you to act. The commands themselves are always run manually by you in Claude Code.
-
-The daily note ends up with a frozen arc of the day: what you started with, what moved, where things landed. Open any past note and you'll know exactly what you were juggling that day.
-
-The `Career/Shipped.md` file accumulates over time — useful for performance reviews, promo packets, and interview prep.
-
----
-
-## Career growth layer
-
-The system includes a monthly command for building a narrative career record — useful for promo packets, performance reviews, and interview prep.
-
-**`Career/My Story.md`** is a narrative document written in third person that chronicles your growth over time. Each chapter covers a few months and reads like an outside perspective on your work — not a bullet list of accomplishments, but a story of what you were figuring out, what you owned, and what changed.
-
-**Your career Slack channel** is the capture layer. When something notable happens — a shoutout, a moment worth remembering, a reflection you want to hold onto — post it there. The channel becomes the raw material `/my-story` reads each month.
-
-**`/my-story`** runs on the first Friday of each month (triggered by a Slack reminder). It reads your career channel posts since the last chapter, pulls your merged PRs from GitHub for the same period, synthesizes themes across both sources, and writes the next chapter. PRs are included because meaningful technical work often goes unposted — they're evidence even when you didn't write about them.
-
-The `Career/Shipped.md` file that `/eod` builds throughout the year feeds into this monthly rhythm: day-to-day entries become chapter-level narrative over time.
-
-To set this up, add the career placeholder to your `skills/my-story.md` replacements:
-
-| Placeholder | Replace with |
-|---|---|
-| `YOUR_CAREER_SLACK_CHANNEL` | Channel ID of your career notes channel in Slack |
-
-Then create the narrative doc in your vault:
-
-```bash
-touch "/YOUR_VAULT_PATH/Career/My Story.md"
-```
-
-Add an initial chapter manually (or ask Claude to write one from your existing career notes), then `/my-story` picks up from there each month.
+`scripts/install.sh` reads `config.env` and substitutes these into the skill files before copying them to `~/.claude/commands` and/or `~/.cursor/commands`.
 
 ---
 
 ## Forwarding commitments
 
-When you tell someone "I'll look at that" in Slack, forward the message to your reminders channel. `/morning` reads it the next day and surfaces it in your daily note. No task manager, no copy-pasting — just a forward.
+When you say “I’ll look at that” in Slack, forward the message to your reminders channel. `/eod` that evening sweeps it into next workday’s Morning. No task manager required.
+
+Catch-up is built for skipped days: since the last note with `## EOD` or `## Morning`, or the last 5 calendar days if you went dark — not “today only.”
+
+---
+
+## Career growth layer (optional)
+
+```
+Daily Growth/Revise crumbs  →  /weekly-wins story seeds  →  /my-story chapters
+         ↑                              ↑
+   Career Slack moments           Shipped.md trail
+```
+
+Nothing auto-posts. `/eod` only **asks** on Fri/Mon whether to run weekly wins / my-story.
 
 ---
 
 ## Design decisions
 
-The system was intentionally kept small. Things that were designed and rejected:
+Kept small on purpose. Rejected:
+- Live-updating dashboard (destroys the historical arc)
+- Required morning command (reminder fatigue killed the baseline)
+- Calendar MCP (faster to glance)
+- Auto-capturing every agent session (low signal)
 
-- **Live-updating status dashboard** — overwrites itself, loses the historical record of what a day looked like
-- **Calendar integration** — no MCP available; faster to just glance at your calendar
-- **Automated EOD synthesis with multiple snapshots** — too many moving parts, nothing gets used
-- **Auto-capturing git/Claude Code session activity** — lower signal than the manual `## Claude Sessions` notes engineers already write naturally
+**July 2026 redesign:** one evening ritual. Seed tomorrow at closeout. Morning nudge deleted.
 
-The interesting constraint was ADHD-aware design: if it requires remembering to do something, it won't get done. The Slack reminders solve the "remember" problem; the commands solve the "do the work" problem.
+---
+
+## Sharing this with a teammate
+
+1. Send [docs/SHARE.md](docs/SHARE.md) (or paste into Notion).  
+2. Point them at [docs/ADOPT.md](docs/ADOPT.md).  
+3. Let them fork adapters via [docs/TWEAK.md](docs/TWEAK.md) — don’t hand them your private `config.env` or vault.
+
+---
+
+*You don't have to be perfect. Even `/eod` most evenings builds the trail.*
