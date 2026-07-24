@@ -23,46 +23,40 @@ YOUR_SLACK_CHANNEL_ID=""
 YOUR_SLACK_USER_ID=""
 YOUR_CAREER_SLACK_CHANNEL=""
 YOUR_CAREER_SLACK_CHANNEL_ID=""
+YOUR_NAME=""
 if [[ -f "$CONFIG" ]]; then
   # shellcheck disable=SC1090
   source "$CONFIG"
+fi
+
+if [[ -z "$YOUR_VAULT_PATH$YOUR_LINEAR_EMAIL$YOUR_SLACK_USER_ID" ]]; then
+  echo "Note: config.env not found or empty — personal values won't be normalized, so the diff will be noisy (not a leak; this script only reads)." >&2
 fi
 
 normalize() {
   local src="$1" dest="$2"
   local content
   content="$(cat "$src")"
-  if [[ -n "${YOUR_VAULT_PATH}" ]]; then
-    content="${content//$YOUR_VAULT_PATH/YOUR_VAULT_PATH}"
-  fi
-  # Common Ruthie / author defaults if config missing
-  content="${content//\/Users\/ruthieirvin\/code\/Ruthie Notes/YOUR_VAULT_PATH}"
-  content="${content//ruthieirvin@honeycomb.io/YOUR_LINEAR_EMAIL}"
-  content="${content//#ruthie-reminders/YOUR_REMINDERS_CHANNEL}"
-  content="${content//C0BAC96P6G1/YOUR_SLACK_CHANNEL_ID}"
-  content="${content//U05G4HS8LRK/YOUR_SLACK_USER_ID}"
-  content="${content//#career-ruthie/YOUR_CAREER_SLACK_CHANNEL}"
-  if [[ -n "${YOUR_LINEAR_EMAIL}" ]]; then
-    content="${content//$YOUR_LINEAR_EMAIL/YOUR_LINEAR_EMAIL}"
-  fi
-  if [[ -n "${YOUR_REMINDERS_CHANNEL}" ]]; then
+  # All personal values come from config.env (gitignored) — nothing hardcoded here.
+  [[ -n "$YOUR_VAULT_PATH" ]]              && content="${content//$YOUR_VAULT_PATH/YOUR_VAULT_PATH}"
+  [[ -n "$YOUR_LINEAR_EMAIL" ]]            && content="${content//$YOUR_LINEAR_EMAIL/YOUR_LINEAR_EMAIL}"
+  [[ -n "$YOUR_SLACK_CHANNEL_ID" ]]        && content="${content//$YOUR_SLACK_CHANNEL_ID/YOUR_SLACK_CHANNEL_ID}"
+  [[ -n "$YOUR_SLACK_USER_ID" ]]           && content="${content//$YOUR_SLACK_USER_ID/YOUR_SLACK_USER_ID}"
+  [[ -n "$YOUR_CAREER_SLACK_CHANNEL_ID" ]] && content="${content//$YOUR_CAREER_SLACK_CHANNEL_ID/YOUR_CAREER_SLACK_CHANNEL_ID}"
+  # Channel names: normalize both the #-prefixed and bare forms (the bare form appears in keyword lists).
+  if [[ -n "$YOUR_REMINDERS_CHANNEL" ]]; then
     content="${content//$YOUR_REMINDERS_CHANNEL/YOUR_REMINDERS_CHANNEL}"
+    content="${content//${YOUR_REMINDERS_CHANNEL#\#}/reminders-channel name}"
   fi
-  if [[ -n "${YOUR_SLACK_CHANNEL_ID}" ]]; then
-    content="${content//$YOUR_SLACK_CHANNEL_ID/YOUR_SLACK_CHANNEL_ID}"
-  fi
-  if [[ -n "${YOUR_SLACK_USER_ID}" ]]; then
-    content="${content//$YOUR_SLACK_USER_ID/YOUR_SLACK_USER_ID}"
-  fi
-  if [[ -n "${YOUR_CAREER_SLACK_CHANNEL}" ]]; then
+  if [[ -n "$YOUR_CAREER_SLACK_CHANNEL" ]]; then
     content="${content//$YOUR_CAREER_SLACK_CHANNEL/YOUR_CAREER_SLACK_CHANNEL}"
+    content="${content//${YOUR_CAREER_SLACK_CHANNEL#\#}/career-channel}"
   fi
-  if [[ -n "${YOUR_CAREER_SLACK_CHANNEL_ID}" ]]; then
-    content="${content//$YOUR_CAREER_SLACK_CHANNEL_ID/YOUR_CAREER_SLACK_CHANNEL_ID}"
+  # Soften first-person name in the growth lens for comparison.
+  if [[ -n "$YOUR_NAME" ]]; then
+    content="${content//Help $YOUR_NAME/Help the user}"
+    content="${content//$YOUR_NAME/the user}"
   fi
-  # Soften first-person name in growth lens for comparison
-  content="${content//Ruthie/the user}"
-  content="${content//Help Ruthie/Help the user}"
   printf '%s' "$content" > "$dest"
 }
 

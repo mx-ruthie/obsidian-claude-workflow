@@ -21,50 +21,50 @@ YOUR_SLACK_CHANNEL_ID=""
 YOUR_SLACK_USER_ID=""
 YOUR_CAREER_SLACK_CHANNEL=""
 YOUR_CAREER_SLACK_CHANNEL_ID=""
+YOUR_NAME=""
 if [[ -f "$CONFIG" ]]; then
   # shellcheck disable=SC1090
   source "$CONFIG"
+fi
+
+# Fail closed: never publish if we lack the values needed to strip personal data.
+missing=()
+for v in YOUR_VAULT_PATH YOUR_LINEAR_EMAIL YOUR_REMINDERS_CHANNEL YOUR_SLACK_CHANNEL_ID YOUR_SLACK_USER_ID YOUR_NAME; do
+  [[ -z "${!v}" ]] && missing+=("$v")
+done
+if (( ${#missing[@]} )); then
+  echo "Refusing to publish: config.env is missing ${missing[*]}." >&2
+  echo "These personal values must be set so they can be stripped out of skills/." >&2
+  echo "Copy config.example.env -> config.env and fill it in." >&2
+  exit 1
 fi
 
 sanitize() {
   local src="$1" dest="$2"
   local content
   content="$(cat "$src")"
-  if [[ -n "${YOUR_VAULT_PATH}" ]]; then
-    content="${content//$YOUR_VAULT_PATH/YOUR_VAULT_PATH}"
-  fi
-  content="${content//\/Users\/ruthieirvin\/code\/Ruthie Notes/YOUR_VAULT_PATH}"
-  content="${content//ruthieirvin@honeycomb.io/YOUR_LINEAR_EMAIL}"
-  content="${content//#ruthie-reminders/YOUR_REMINDERS_CHANNEL}"
-  content="${content//C0BAC96P6G1/YOUR_SLACK_CHANNEL_ID}"
-  content="${content//U05G4HS8LRK/YOUR_SLACK_USER_ID}"
-  content="${content//#career-ruthie/YOUR_CAREER_SLACK_CHANNEL}"
-  if [[ -n "${YOUR_LINEAR_EMAIL}" ]]; then
-    content="${content//$YOUR_LINEAR_EMAIL/YOUR_LINEAR_EMAIL}"
-  fi
-  if [[ -n "${YOUR_REMINDERS_CHANNEL}" ]]; then
-    content="${content//$YOUR_REMINDERS_CHANNEL/YOUR_REMINDERS_CHANNEL}"
-  fi
-  if [[ -n "${YOUR_SLACK_CHANNEL_ID}" ]]; then
-    content="${content//$YOUR_SLACK_CHANNEL_ID/YOUR_SLACK_CHANNEL_ID}"
-  fi
-  if [[ -n "${YOUR_SLACK_USER_ID}" ]]; then
-    content="${content//$YOUR_SLACK_USER_ID/YOUR_SLACK_USER_ID}"
-  fi
-  if [[ -n "${YOUR_CAREER_SLACK_CHANNEL}" ]]; then
+  # All personal values come from config.env (gitignored) — nothing hardcoded here.
+  content="${content//$YOUR_VAULT_PATH/YOUR_VAULT_PATH}"
+  content="${content//$YOUR_LINEAR_EMAIL/YOUR_LINEAR_EMAIL}"
+  content="${content//$YOUR_SLACK_CHANNEL_ID/YOUR_SLACK_CHANNEL_ID}"
+  content="${content//$YOUR_SLACK_USER_ID/YOUR_SLACK_USER_ID}"
+  [[ -n "$YOUR_CAREER_SLACK_CHANNEL_ID" ]] && content="${content//$YOUR_CAREER_SLACK_CHANNEL_ID/YOUR_CAREER_SLACK_CHANNEL_ID}"
+  # Channel names: strip both the #-prefixed and bare forms (the bare form appears in keyword lists).
+  content="${content//$YOUR_REMINDERS_CHANNEL/YOUR_REMINDERS_CHANNEL}"
+  content="${content//${YOUR_REMINDERS_CHANNEL#\#}/reminders-channel name}"
+  if [[ -n "$YOUR_CAREER_SLACK_CHANNEL" ]]; then
     content="${content//$YOUR_CAREER_SLACK_CHANNEL/YOUR_CAREER_SLACK_CHANNEL}"
+    content="${content//${YOUR_CAREER_SLACK_CHANNEL#\#}/career-channel}"
   fi
-  if [[ -n "${YOUR_CAREER_SLACK_CHANNEL_ID}" ]]; then
-    content="${content//$YOUR_CAREER_SLACK_CHANNEL_ID/YOUR_CAREER_SLACK_CHANNEL_ID}"
-  fi
-  content="${content//Help Ruthie notice/Help the user notice}"
-  content="${content//unless Ruthie says yes/unless the user says yes}"
-  content="${content//if Ruthie asked/if the user asked}"
-  content="${content//so Ruthie can/so the user can}"
-  content="${content//what Ruthie is/what the person is}"
-  content="${content//posted by Ruthie/posted by the user}"
-  content="${content//Ruthie //}"
-  content="${content// Ruthie/ the user}"
+  # Author's first name -> generic voice.
+  content="${content//Help $YOUR_NAME notice/Help the user notice}"
+  content="${content//unless $YOUR_NAME says yes/unless the user says yes}"
+  content="${content//if $YOUR_NAME asked/if the user asked}"
+  content="${content//so $YOUR_NAME can/so the user can}"
+  content="${content//what $YOUR_NAME is/what the person is}"
+  content="${content//posted by $YOUR_NAME/posted by the user}"
+  content="${content//$YOUR_NAME /}"
+  content="${content// $YOUR_NAME/ the user}"
   printf '%s\n' "$content" > "$dest"
 }
 
