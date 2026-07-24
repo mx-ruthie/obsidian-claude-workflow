@@ -27,6 +27,6 @@ Steps:
    - **Outcome:** what changed or was unblocked
 5. Include a one-line **Week in review** at the top (theme of shipped + growth, not a task list).
 6. Append `## Week of YYYY-MM-DD` to `Weekly Wins.md`.
-7. Print the output and confirm where it was written. Call out any Growth lines that became seeds.
+7. Print the output and confirm where it was written. Call out any Growth lines that became seeds so the user can feel the congratulate loop.
 
 If Shipped.md has no entries and there are also no Learning/Growth crumbs, say so and suggest `/eod` / `/log-shipped` — offer a short "quiet week" stub only if the user asks.

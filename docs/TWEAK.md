@@ -25,6 +25,8 @@ The skill is a **loop** (phases). Your tools are **adapters**. Change adapters; 
 | Notes home | Obsidian markdown | Notion pages with the same heading names |
 | What “shipped” means | PR merged + ticket Done | Doc published / email sent / decision locked / person unblocked |
 
+> **Meetings, whatever the tool:** build the entry from the **verbatim transcript**, not the tool's AI summary — summaries hallucinate content and mis-attribute speakers. If your tool only exposes a summary, keep the entry short and flag it as unverified.
+
 ## Common forks
 
 ### “I'm not an engineer who lives in PRs”
