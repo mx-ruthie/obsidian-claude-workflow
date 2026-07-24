@@ -6,7 +6,7 @@ Morning is a **glance**, not a command. `/morning` exists only as catch-up when 
 
 Built for Claude Code or Cursor. ADHD-aware: one ~5pm nudge; the skill does the blank-page work.
 
-**Version:** see [`VERSION`](VERSION) (currently dated in that file).
+**Version:** current release date in [`VERSION`](VERSION); per-release changes in [`CHANGELOG.md`](CHANGELOG.md) and on the [Releases](https://github.com/mx-ruthie/obsidian-claude-workflow/releases) page.
 
 ---
 
@@ -70,7 +70,8 @@ Then one weekday ~5pm nudge: `Run /eod`.
 | [`docs/CAREER.md`](docs/CAREER.md) | Wire Shipped → Weekly Wins → My Story (± career Slack) |
 | [`docs/ADOPT.md`](docs/ADOPT.md) | Human: week-1 habit + smoke test |
 | [`docs/TWEAK.md`](docs/TWEAK.md) | Human + agent: swap adapters |
-| [`VERSION`](VERSION) | Release date + maintainer sync notes |
+| [`VERSION`](VERSION) | Current release date + maintainer sync notes |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed per release (also on the Releases page) |
 
 ---
 
@@ -134,9 +135,11 @@ Missing pieces are fine — tell the agent what to strip or swap ([`docs/TWEAK.m
 ```bash
 ./scripts/check-drift.sh      # local Cursor commands vs skills/ (normalized)
 ./scripts/sync-from-local.sh  # re-sanitize local → skills/, bump VERSION date
+# then: add a CHANGELOG.md entry, commit, and cut a date-tagged release:
+gh release create "v$(head -1 VERSION)" -t "$(head -1 VERSION)" -F <changelog-entry>
 ```
 
-See [`VERSION`](VERSION) for details.
+See [`VERSION`](VERSION) and [`CHANGELOG.md`](CHANGELOG.md) for details.
 
 ---
 
