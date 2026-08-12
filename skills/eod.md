@@ -22,42 +22,43 @@ Help the user notice **growth** and **misses** without a long journal. Prefer on
 
 **Miss / revise signals** (not shame — course-correction):
 - Same papercut deferred 3+ times
-- Shipped or merged something the user couldn’t explain at a boundary that mattered
+- Shipped or merged something couldn’t explain at a boundary that mattered
 - Avoided a hard conversation that then got worse
-- Let noise win over the one ritual (or over Focus)
+- Let noise win over the one ritual
 - Accepted AI output they couldn’t defend when stakes were high
-- Burned the day’s Focus via unowned scope creep
+- Burned the day’s momentum via unowned scope creep
 - Went deep on technical detail before checking whether the audience needed it
 
-When proposing lines from the session, `## Learning`, a skim of today’s Granola call transcripts, or highlights flagged in the **YOUR_CAREER_SLACK_CHANNEL** channel, offer **candidates** and let the user confirm, edit, or skip. Never fabricate a growth moment — a quiet day with no real signal means no coaching line, not a manufactured one.
+When proposing lines from the session, `## Learning`, or a meeting transcript (including a social meeting from step 4 that got no `## Meetings` entry — the transcript still gets skimmed for this), or highlights flagged in the **YOUR_CAREER_SLACK_CHANNEL** channel, offer **candidates** and let the user confirm, edit, or skip. Never fabricate a growth moment — a quiet day with no real signal means no coaching line, not a manufactured one.
 
 ---
 
 ## Part A — Close today
 
-1. Read today’s daily note. Extract the `## Morning` section if it exists — baseline to diff against. **Missing Morning is normal** (the user often won’t have run a morning command; seed may also be absent after skipped EODs). If missing, still write EOD from current state — no need to call it out as a failure, just omit Morning-based “Picked up” diffs you can’t compute.
+1. Read today’s daily note. Extract the `## Morning` section if it exists — baseline to diff against. **Missing Morning is normal** (often won’t have run a morning command; seed may also be absent after skipped EODs). If missing, still write EOD from current state — no need to call it out as a failure, just omit Morning-based “Picked up” diffs you can’t compute.
 
 2. Fetch current state in parallel:
    a. **PRs merged today** — `gh pr list --author "@me" --state merged --search "merged:>=TODAY" --json number,title,url,mergedAt`
-   b. **Still-open PRs** — `gh pr list --author "@me" --state open --json number,title,url,reviewDecision,isDraft`
-   c. **Current in-progress Linear tickets** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "In Progress"
-   d. **Linear tickets in Review** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "In Review" (needed for open-task status mismatches)
-   e. **Linear tickets completed today** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "Done", updated today
-   f. **Today’s meetings** — Granola MCP, list meetings from today
+   b. **Current in-progress Linear tickets** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "In Progress"
+   c. **Linear tickets completed today** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "Done", updated today
+   d. **Not-started tickets** — Linear MCP, issues assigned to YOUR_LINEAR_EMAIL with state "Todo" or "Blocked". These have no PR or branch to remind the user they exist, so they're the ones actually worth surfacing.
+   e. **Today’s meetings** — Granola MCP, list meetings from today
+   f. **Project status** — for the Linear project(s) behind (b)’s tickets, fetch the project (`mcp__linear__get_project`) and its milestones (`mcp__linear__list_milestones`). Note the milestone that contains today’s active tickets, its progress %, and the project’s target date if set.
 
 3. Compare current state against the morning snapshot to determine:
    - **Shipped**: PRs merged or tickets completed today
-   - **Moved forward**: things that changed state (e.g. PR got approved, ticket moved)
-   - **Open tasks**: actionable carry-over (see step 5) — the user’s own open PRs, in-progress tickets, in-review tickets (especially status mismatches). Do **not** include PRs waiting on the user’s review — those live on GitHub, not in the note.
    - **Picked up**: anything in-progress now that wasn’t in the morning snapshot
+   - **Open tasks**: tickets from (2d) still sitting in Todo/Blocked — not a GitHub-visible carry-over, just the genuinely stalled ones
    - Omit any line that has nothing to report
 
-4. **Meeting catch-up (optional):** If Granola (or your meeting tool) is available, check today’s daily note for an existing `## Meetings` section. For each meeting not already mentioned, pull its **verbatim transcript** (e.g. Granola’s `get_meeting_transcript`) and write the entry from that — **do not** use the AI-generated summary. Meeting summaries have proven unreliable: they hallucinate content and mis-attribute speakers. Ground every claim, decision, and attribution in what the transcript actually says, and attribute a speaker only when the transcript names them. If a transcript is empty or unavailable, say so rather than falling back to the summary. Append a brief entry:
-   ```
-   ### Meeting title (HH:MMam/pm)
-   [2-3 sentence summary grounded in the transcript: what was discussed, any decisions made, any actions you own]
-   ```
-   If all meetings are already logged, or no meeting tool is configured, skip silently.
+4. **Meeting catch-up:** Check today’s daily note for an existing `## Meetings` section. For each meeting from Granola (step 2e) not already logged, pull its **verbatim transcript** with `get_meeting_transcript` — **never** the AI summary; summaries have proven unreliable (they hallucinate content and mis-attribute speakers).
+   - **Work meeting** (standup, sync, pairing on a work topic): write **one line** — decisions made plus anything the user owns. Skip the roster of everyone else’s status unless it changes their own work.
+     ```
+     ### Meeting title (HH:MMam/pm)
+     [one line: decisions/actions only]
+     ```
+   - **Social meeting** (donut, casual 1:1, no work agenda): write **no** `## Meetings` entry. Still skim the transcript — if a career-relevant moment surfaced (advice given, feedback, a hard call, a promo/comp conversation), it becomes a Growth/Revise candidate in step 5b instead of a summary here. Nothing career-relevant → no trace at all, which is correct.
+   - If all meetings are already logged, skip silently.
 
 5. Append an `## EOD` section to today’s daily note (at the end of the file, before `## Claude Sessions` if that section exists):
 
@@ -66,24 +67,19 @@ When proposing lines from the session, `## Learning`, a skim of today’s Granol
 
    **Shipped:** PR #12345 merged (TICKET-123), TICKET-456 done
    **Picked up:** TICKET-789
+   **Project:** Payments Migration — Rollout milestone 62% (target 2026-08-28)
 
    ### Open tasks
-   - [ ] **[TICKET-774](url)** / [PR #36621](url) — draft, 0 reviews, CI green → get review or mark ready
-   - [ ] **[TICKET-778](url)** — In Review but PR already merged → close the Linear ticket
+   - [ ] **[TICKET-774](url)** — Todo, unstarted → pick up or reassign
    ```
 
    - **Shipped** / **Picked up**: one line each. If nothing shipped, say so honestly.
-   - **Open tasks**: a markdown **checkbox list** (`- [ ]`) so the user can tick items off in Obsidian. Omit the subsection if empty.
-   - **What belongs in Open tasks** (actionable only — skip noise):
-     - the user’s own open PRs (draft/review/CI state inline)
-     - Tickets assigned to the user in Progress or In Review
-     - **Status mismatches** — e.g. Linear still In Review but linked PR(s) merged → close the ticket
-     - Follow-ups surfaced by the reminder triage (step 8, Part B) that belong to today’s carry-over
-   - **Do not** list PRs waiting on the user’s review — they read those on GitHub, not here.
-   - Format each item `- [ ] **[TICKET](url)** — short status → next step` (one concrete verb phrase: Close ticket / Get review / Address comments / Merge / Pick up). Prefer the cheapest close when the loop is stale admin.
+   - **Project**: one line, only when (2f) found a project behind today’s tickets. Omit entirely if none.
+   - **Open tasks**: a markdown **checkbox list** (`- [ ]`), sourced only from (2d)/(3) — tickets still Todo or Blocked, with no PR and no active work. **Do not** list the user’s own open PRs, their review state, or tickets already In Progress/In Review — those are visible on GitHub/Linear directly and don’t need repeating here.
+   - Format each item `- [ ] **[TICKET](url)** — Todo/Blocked[, reason if blocked] → pick up / unblock / reassign`.
    - Also mirror this checklist in the chat report (step 14).
 
-5b. **Growth / revise (optional, 30 seconds):** Using the Growth lens above + today’s `## Learning` + this session + a light skim of `get_meeting_transcript` for today’s Granola meetings (from step 2e) for communication/delivery moments + a skim of the **YOUR_CAREER_SLACK_CHANNEL** Slack channel (private; channel ID: `YOUR_CAREER_SLACK_CHANNEL_ID`) since the last EOD (fall back to the past week) for any career highlight the user or their manager flagged there:
+5b. **Growth / revise (optional, 30 seconds):** Using the Growth lens above + today’s `## Learning` + this session + the transcripts from step 4 (work and skipped-social alike) for communication/delivery moments + a skim of the **YOUR_CAREER_SLACK_CHANNEL** Slack channel (private, ID `YOUR_CAREER_SLACK_CHANNEL_ID`) since the last EOD (fall back to the past week) for any career highlight the user or their manager flagged there:
    - If there’s a real growth moment, add under EOD: `**Growth:** …` (one line; congratulate specifically — name the judgment, not “good job”)
    - If there’s a real miss worth course-correcting, add: `**Revise:** …` (one line — what to try differently, not self-attack)
    - A communication moment from a transcript (audience calibration, went too technical too early, landed a message well) counts as either — file it under Growth or Revise, don’t add a third category.
@@ -98,47 +94,40 @@ When proposing lines from the session, `## Learning`, a skim of today’s Granol
 7. Compute the next workday date and its daily note path. If that note already has a `## Morning` section, skip Part B — do not overwrite. Report that tomorrow is already seeded.
 
 8. Fetch orientation data in parallel (reuse Part A results where identical):
-   a. **In-progress + In Review Linear tickets** — same as 2c + 2d
-   b. **Open PRs** — same as 2b; note review state (approved / changes requested / waiting / no reviews yet) and draft
+   a. **Not-started + in-progress Linear tickets** — same as 2b + 2d
+   b. **Project status** — same as 2f
    c. **Reminder inbox sweep + triage** — read YOUR_REMINDERS_CHANNEL (channel ID: `YOUR_SLACK_CHANNEL_ID`), messages from user `YOUR_SLACK_USER_ID`.
       - **Window (built for skipped days):** Find the most recent daily note that has either `## EOD` or `## Morning`. Start the day *after* that note's date, through today (inclusive). Prefer the later of the two if both exist on different days.
       - **Fallback:** If no `## EOD` or `## Morning` exists in the last ~14 days of notes, sweep the last **5 calendar days** through today — do **not** fall back to "today only." The user will sometimes skip `/eod` for a day or two; the window must absorb that without being prompted.
-      - **Skip** any message that is a scheduled nudge (contains any of: "End of day nudge", "Good morning", "Run `/morning`", "Run `/eod`", "Anything in Slack today", "Forward" + reminders-channel name, "End of week nudge", "weekly-wins", "First Friday", "`/my-story`", or "Sent using"). These are channel noise, not commitments.
+      - **Skip** any message that is a scheduled nudge (contains any of: "End of day nudge", "Good morning", "Run `/morning`", "Run `/eod`", "Anything in Slack today", "Forward" + "reminders-channel name", "End of week nudge", "weekly-wins", "First Friday", "`/my-story`", or "Sent using"). These are channel noise, not commitments.
       - **Triage each remaining item** (these are things the user forwarded as reminders to themselves) into one of four buckets and act:
-        - **Reading link** ("link i want to read", "add to reading list", a bare article/repo/RFC URL): file it into your reading-list note (e.g. `YOUR_VAULT_PATH/Links I want to read.md`) under the best-fit `## Category` heading; keep that file bucketed by topic (e.g. by area of work, tools/AI, frontend, learning, reading-for-fun) and create a new `## Category` only if none fits. Entry format: `- [Title](url) — one-line what-it-is`. This is low-stakes and reversible, so file it directly; then list what you filed in the report. Do **not** put reading links in the daily note.
-        - **Commitment / follow-up / dated obligation** ("follow up on this", "implement this soon", "loop back to X", a due date): carry into the seed as a checkbox under **Commitments** (obligations to others / dated) or **Open tasks** (your own follow-through). If it clearly warrants a Linear ticket, *propose* creating one in the report — do not auto-create.
+        - **Reading link** ("link i want to read", "add to links I read", a bare article/repo/RFC URL): file it into `YOUR_VAULT_PATH/Links I want to read.md` under the best-fit `## Category` heading (that file is already bucketed — e.g. AI & Agents, Work: Honeycomb Internal, Frontend & Design Systems, Learning, Interesting Reads). Create a new `## Category` only if none fits. Entry format: `- [Title](url) — one-line what-it-is`. This is low-stakes and reversible, so file it directly; then list what you filed in the report. Do **not** put reading links in the daily note.
+        - **Commitment / follow-up / dated obligation** ("follow up on this", "implement this soon", "loop back to X", a due date): carry into the seed as a checkbox under **Commitments**. If it clearly warrants a Linear ticket, *propose* creating one in the report — do not auto-create.
         - **Expense** ("expense this" + receipt/image): surface it as an action in the report with the receipt reference; do not auto-do it.
         - **FYI / feedback to keep** ("great feedback from X", something to remember): note it briefly in the report; don’t clutter the task list.
-
-8b. **Ask for tomorrow’s Focus:** Prompt once — “What’s tomorrow’s focus: ticket + one-line goal?” If the user gives one, use it verbatim as the Focus line in step 9. If they don’t have one ready, don’t push — fall back to the placeholder. Never block seeding on this answer.
 
 9. Create or update the next workday’s daily note. If the file does not exist, create it. Write:
 
    ```
    # Weekday, Month D, YYYY
 
-   ## Focus
-
-   - _not set — tell me ticket + one-line goal and I'll fill this in_
-
    ## Morning
+
+   **Project:** Payments Migration — Rollout milestone 62% (target 2026-08-28)
 
    **Commitments**
    - [ ] [forwarded obligation — dated / owed to someone]
 
    ### Open tasks
-   - [ ] **[TICKET-774](url)** / [PR #36621](url) — draft, 0 reviews, CI green → get review or mark ready
-   - [ ] **[TICKET-778](url)** — In Review, PR already merged → close the Linear ticket
+   - [ ] **[TICKET-774](url)** — Todo, unstarted → pick up or reassign
    ```
 
-   - `## Focus`: the user’s answer from 8b verbatim if given, otherwise the placeholder shown above (session-start reads it either way).
-   - **Commitments** and **Open tasks** are both markdown **checkbox lists** (`- [ ]`) so the user can tick them off. **Open tasks** replaces the old table + the old In-progress / Your-PRs / Reviews-waiting bullet lists; same actionable-only rules as EOD step 5.
-   - **Do not** list PRs waiting on the user’s review — those live on GitHub. Reading links go to `Links I want to read.md` (step 8c), not the note.
+   - **Project**: one line, only when (8b) found a project behind the user’s active tickets. Omit entirely if none.
+   - **Commitments** and **Open tasks** are both markdown **checkbox lists** (`- [ ]`) so the user can tick them off. **Open tasks** = Todo/Blocked tickets only, same rule as EOD step 5 — no PRs, no In Progress/In Review tickets, no review-state noise.
    - Under `## Morning`, omit any subsection that has no entries.
    - If catch-up spanned more than today, note it once under **Commitments** like: `*(catch-up: last EOD/Morning was DD-MM, sweeping YOUR_REMINDERS_CHANNEL from … through today)*`
-   - Do not invent a focus from Linear. Do not copy today’s focus forward unless the user explicitly asks.
 
-10. If the next-workday note already existed with other sections (Learning, etc.), insert Focus + Morning after the title heading without wiping the rest.
+10. If the next-workday note already existed with other sections (Learning, etc.), insert Morning after the title heading without wiping the rest.
 
 ---
 
@@ -161,7 +150,7 @@ When proposing lines from the session, `## Learning`, a skim of today’s Granol
      - "Want me to run the **weekly skill coach** before you go? (surveys the week → friction log + 1–3 skill pitches)"
      - "Want a **team-update blurb** for the Scale Weekly Update? (paste-ready line from your merged PRs + closed tickets)"
    - **Monday:** "Want me to run the **weekly skill coach** for the past week?" (skip the team-update blurb Mondays — the update already shipped)
-   - **Tue–Thu:** skip unless the user asks. If either was already run this week (Fri→Mon), don't re-ask.
+   - **Tue–Thu:** skip unless asks. If either was already run this week (Fri→Mon), don't re-ask.
    - Never run either automatically; only the user's yes triggers them.
 
 ---
@@ -169,9 +158,10 @@ When proposing lines from the session, `## Learning`, a skim of today’s Granol
 ## Report
 
 14. Report briefly:
-    - Today’s EOD summary + any meetings caught up
+    - Today’s EOD summary + any meetings caught up (call out anything skipped as social-but-logged-under-Growth)
     - **Open tasks checklist** (same content as the note — scannable in chat)
-    - **Reminder triage** (from step 8c): what was filed to the reading list, what became a task, what’s proposed as a ticket, and any expense to handle — or “nothing new”
+    - **Project status** line
+    - **Reminder triage** (from step 8c): what was filed to the reading list, what became a Commitment, what’s proposed as a ticket, and any expense to handle — or “nothing new”
     - Growth / Revise lines written (or “none — nothing forced”)
     - Next workday date seeded (or “already seeded”) + counts for Commitments / Open tasks rows
     - Prompt status: weekly-wins / my-story / weekly-skill-coach / team-update-blurb / career-channel (asked / already done / skipped) — **stop for an answer if you asked anything**
