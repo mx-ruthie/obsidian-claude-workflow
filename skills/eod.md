@@ -22,7 +22,7 @@ Help the user notice **growth** and **misses** without a long journal. Prefer on
 
 **Miss / revise signals** (not shame — course-correction):
 - Same papercut deferred 3+ times
-- Shipped or merged something couldn’t explain at a boundary that mattered
+- Shipped or merged something the user couldn’t explain at a boundary that mattered
 - Avoided a hard conversation that then got worse
 - Let noise win over the one ritual
 - Accepted AI output they couldn’t defend when stakes were high
@@ -35,7 +35,7 @@ When proposing lines from the session, `## Learning`, or a meeting transcript (i
 
 ## Part A — Close today
 
-1. Read today’s daily note. Extract the `## Morning` section if it exists — baseline to diff against. **Missing Morning is normal** (often won’t have run a morning command; seed may also be absent after skipped EODs). If missing, still write EOD from current state — no need to call it out as a failure, just omit Morning-based “Picked up” diffs you can’t compute.
+1. Read today’s daily note. Extract the `## Morning` section if it exists — baseline to diff against. **Missing Morning is normal** (the user often won’t have run a morning command; seed may also be absent after skipped EODs). If missing, still write EOD from current state — no need to call it out as a failure, just omit Morning-based “Picked up” diffs you can’t compute.
 
 2. Fetch current state in parallel:
    a. **PRs merged today** — `gh pr list --author "@me" --state merged --search "merged:>=TODAY" --json number,title,url,mergedAt`
@@ -150,7 +150,7 @@ When proposing lines from the session, `## Learning`, or a meeting transcript (i
      - "Want me to run the **weekly skill coach** before you go? (surveys the week → friction log + 1–3 skill pitches)"
      - "Want a **team-update blurb** for the Scale Weekly Update? (paste-ready line from your merged PRs + closed tickets)"
    - **Monday:** "Want me to run the **weekly skill coach** for the past week?" (skip the team-update blurb Mondays — the update already shipped)
-   - **Tue–Thu:** skip unless asks. If either was already run this week (Fri→Mon), don't re-ask.
+   - **Tue–Thu:** skip unless the user asks. If either was already run this week (Fri→Mon), don't re-ask.
    - Never run either automatically; only the user's yes triggers them.
 
 ---

@@ -56,15 +56,18 @@ sanitize() {
     content="${content//$YOUR_CAREER_SLACK_CHANNEL/YOUR_CAREER_SLACK_CHANNEL}"
     content="${content//${YOUR_CAREER_SLACK_CHANNEL#\#}/career-channel}"
   fi
-  # Author's first name -> generic voice.
-  content="${content//Help $YOUR_NAME notice/Help the user notice}"
-  content="${content//unless $YOUR_NAME says yes/unless the user says yes}"
-  content="${content//if $YOUR_NAME asked/if the user asked}"
-  content="${content//so $YOUR_NAME can/so the user can}"
-  content="${content//what $YOUR_NAME is/what the person is}"
-  content="${content//posted by $YOUR_NAME/posted by the user}"
-  content="${content//$YOUR_NAME /}"
-  content="${content// $YOUR_NAME/ the user}"
+  # Author's first name -> generic voice. Whole-word match (possessive first),
+  # substituted rather than deleted, so mid-sentence mentions don't break grammar.
+  # Sentence-initial occurrences (start of string, or after . ! ? + optional closing
+  # quote + whitespace) capitalize to "The user"; mid-sentence ones stay lowercase.
+  # (macOS/BSD sed has no \b, and no lookbehind assertions; perl handles both.)
+  content="$(YOUR_NAME_ENV="$YOUR_NAME" perl -0777 -pe '
+    my $n = $ENV{"YOUR_NAME_ENV"};
+    s/(^|[.!?][\x22\x27\x{2019}\x{201d}]?\s+)\Q$n\E\x27s\b/$1 . "The user\x27s"/gme;
+    s/(^|[.!?][\x22\x27\x{2019}\x{201d}]?\s+)\Q$n\E\b/$1 . "The user"/gme;
+    s/\Q$n\E\x27s\b/the user\x27s/g;
+    s/\Q$n\E\b/the user/g;
+  ' <<< "$content")"
   printf '%s\n' "$content" > "$dest"
 }
 
