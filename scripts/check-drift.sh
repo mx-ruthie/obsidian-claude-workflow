@@ -57,7 +57,10 @@ normalize() {
     content="${content//Help $YOUR_NAME/Help the user}"
     content="${content//$YOUR_NAME/the user}"
   fi
-  printf '%s' "$content" > "$dest"
+  # Trailing newline must match sync-from-local.sh's sanitize(), which writes
+  # '%s\n'. Without it every published file diffs on "\ No newline at end of
+  # file" and check-drift reports drift on skills nobody touched.
+  printf '%s\n' "$content" > "$dest"
 }
 
 TMP="$(mktemp -d)"
