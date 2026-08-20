@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Diff local Cursor (or Claude) command files against published skills/,
+# Diff local Claude Code (or Cursor) command files against published skills/,
 # after normalizing personal values → YOUR_* placeholders.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LOCAL_DIR="${LOCAL_COMMANDS_DIR:-$HOME/.cursor/commands}"
+LOCAL_DIR="${LOCAL_COMMANDS_DIR:-$HOME/.claude/commands}"
 CONFIG="${CONFIG_ENV:-$ROOT/config.env}"
+
+# shellcheck source=lib-sanitize.sh
+source "$ROOT/scripts/lib-sanitize.sh"
 
 SKILLS=(eod morning weekly-wins my-story log-shipped log-this weekly-skill-coach)
 
@@ -39,39 +42,7 @@ if [[ -z "$YOUR_VAULT_PATH$YOUR_LINEAR_EMAIL$YOUR_SLACK_USER_ID" ]]; then
 fi
 
 normalize() {
-  local src="$1" dest="$2"
-  local content
-  content="$(cat "$src")"
-  # All personal values come from config.env (gitignored) — nothing hardcoded here.
-  [[ -n "$YOUR_VAULT_PATH" ]]              && content="${content//$YOUR_VAULT_PATH/YOUR_VAULT_PATH}"
-  [[ -n "$YOUR_LINEAR_EMAIL" ]]            && content="${content//$YOUR_LINEAR_EMAIL/YOUR_LINEAR_EMAIL}"
-  [[ -n "$YOUR_SLACK_CHANNEL_ID" ]]        && content="${content//$YOUR_SLACK_CHANNEL_ID/YOUR_SLACK_CHANNEL_ID}"
-  [[ -n "$YOUR_SLACK_USER_ID" ]]           && content="${content//$YOUR_SLACK_USER_ID/YOUR_SLACK_USER_ID}"
-  [[ -n "$YOUR_CAREER_SLACK_CHANNEL_ID" ]] && content="${content//$YOUR_CAREER_SLACK_CHANNEL_ID/YOUR_CAREER_SLACK_CHANNEL_ID}"
-  # Channel names: normalize both the #-prefixed and bare forms (the bare form appears in keyword lists).
-  if [[ -n "$YOUR_REMINDERS_CHANNEL" ]]; then
-    content="${content//$YOUR_REMINDERS_CHANNEL/YOUR_REMINDERS_CHANNEL}"
-    content="${content//${YOUR_REMINDERS_CHANNEL#\#}/reminders-channel name}"
-  fi
-  if [[ -n "$YOUR_CAREER_SLACK_CHANNEL" ]]; then
-    content="${content//$YOUR_CAREER_SLACK_CHANNEL/YOUR_CAREER_SLACK_CHANNEL}"
-    content="${content//${YOUR_CAREER_SLACK_CHANNEL#\#}/career-channel}"
-  fi
-  # Employer / repo / team identifiers — mirror sync-from-local.sh's sanitize().
-  [[ -n "$YOUR_TEAM_UPDATE_NAME" ]] && content="${content//$YOUR_TEAM_UPDATE_NAME/YOUR_TEAM_UPDATE_NAME}"
-  [[ -n "$YOUR_TEAM_UPDATE_DEST" ]] && content="${content//$YOUR_TEAM_UPDATE_DEST/YOUR_TEAM_UPDATE_DEST}"
-  [[ -n "$YOUR_TEAM_CHANNEL" ]]     && content="${content//$YOUR_TEAM_CHANNEL/YOUR_TEAM_CHANNEL}"
-  [[ -n "$YOUR_ORG" ]]              && content="${content//$YOUR_ORG/YOUR_ORG}"
-  [[ -n "$YOUR_REPO" ]]             && content="${content//$YOUR_REPO/YOUR_REPO}"
-  # Soften first-person name in the growth lens for comparison.
-  if [[ -n "$YOUR_NAME" ]]; then
-    content="${content//Help $YOUR_NAME/Help the user}"
-    content="${content//$YOUR_NAME/the user}"
-  fi
-  # Trailing newline must match sync-from-local.sh's sanitize(), which writes
-  # '%s\n'. Without it every published file diffs on "\ No newline at end of
-  # file" and check-drift reports drift on skills nobody touched.
-  printf '%s\n' "$content" > "$dest"
+  apply_placeholders < "$1" > "$2"
 }
 
 TMP="$(mktemp -d)"
