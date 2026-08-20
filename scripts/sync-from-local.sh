@@ -7,7 +7,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOCAL_DIR="${LOCAL_COMMANDS_DIR:-$HOME/.cursor/commands}"
 CONFIG="${CONFIG_ENV:-$ROOT/config.env}"
 
-SKILLS=(eod morning weekly-wins my-story log-shipped log-this)
+SKILLS=(eod morning weekly-wins my-story log-shipped log-this weekly-skill-coach)
 
 if [[ ! -d "$LOCAL_DIR" ]]; then
   echo "No local commands dir: $LOCAL_DIR"
@@ -22,6 +22,11 @@ YOUR_SLACK_USER_ID=""
 YOUR_CAREER_SLACK_CHANNEL=""
 YOUR_CAREER_SLACK_CHANNEL_ID=""
 YOUR_NAME=""
+YOUR_ORG=""
+YOUR_REPO=""
+YOUR_TEAM_UPDATE_NAME=""
+YOUR_TEAM_CHANNEL=""
+YOUR_TEAM_UPDATE_DEST=""
 if [[ -f "$CONFIG" ]]; then
   # shellcheck disable=SC1090
   source "$CONFIG"
@@ -56,6 +61,14 @@ sanitize() {
     content="${content//$YOUR_CAREER_SLACK_CHANNEL/YOUR_CAREER_SLACK_CHANNEL}"
     content="${content//${YOUR_CAREER_SLACK_CHANNEL#\#}/career-channel}"
   fi
+  # Employer / repo / team identifiers. These reach the skills through incidental
+  # prose (a reading-list category, a named weekly ritual, the main repo) rather
+  # than through config, so they need stripping too. Longest phrase first.
+  [[ -n "$YOUR_TEAM_UPDATE_NAME" ]] && content="${content//$YOUR_TEAM_UPDATE_NAME/YOUR_TEAM_UPDATE_NAME}"
+  [[ -n "$YOUR_TEAM_UPDATE_DEST" ]] && content="${content//$YOUR_TEAM_UPDATE_DEST/YOUR_TEAM_UPDATE_DEST}"
+  [[ -n "$YOUR_TEAM_CHANNEL" ]]     && content="${content//$YOUR_TEAM_CHANNEL/YOUR_TEAM_CHANNEL}"
+  [[ -n "$YOUR_ORG" ]]              && content="${content//$YOUR_ORG/YOUR_ORG}"
+  [[ -n "$YOUR_REPO" ]]             && content="${content//$YOUR_REPO/YOUR_REPO}"
   # Author's first name -> generic voice. Whole-word match (possessive first),
   # substituted rather than deleted, so mid-sentence mentions don't break grammar.
   # Sentence-initial occurrences (start of string, or after . ! ? + optional closing
