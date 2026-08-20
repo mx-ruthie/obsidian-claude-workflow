@@ -141,8 +141,10 @@ Missing pieces are fine — tell the agent what to strip or swap ([`docs/TWEAK.m
 ```bash
 ./scripts/check-drift.sh      # local commands vs skills/ (normalized)
 ./scripts/sync-from-local.sh  # re-sanitize local → skills/, bump VERSION date
-# then: add a CHANGELOG.md entry, commit, and cut a date-tagged release:
-gh release create "v$(head -1 VERSION)" -t "$(head -1 VERSION)" -F <changelog-entry>
+# then: add a CHANGELOG.md entry, commit, and cut a date-tagged release.
+# Tags are dot-separated (v2026.08.20) while VERSION/CHANGELOG dates are dashed:
+TAG="v$(head -1 VERSION | tr '-' '.')"
+gh release create "$TAG" -t "$TAG" -F <changelog-entry>
 ```
 
 See [`VERSION`](VERSION) and [`CHANGELOG.md`](CHANGELOG.md) for details.

@@ -2,30 +2,32 @@
 
 # Version / sync
 
-`VERSION` is the release date of the **shareable** skills in this repo. See [`CHANGELOG.md`](CHANGELOG.md) for what changed in each release, and the repo's **Releases** page for the matching `v<date>` tags.
+`VERSION` is the release date of the **shareable** skills in this repo. See [`CHANGELOG.md`](CHANGELOG.md) for what changed in each release, and the repo's **Releases** page for the matching tags (dot-separated: `2026-08-20` here is tagged `v2026.08.20`).
 
 ## Maintainer sync (author of this repo)
 
 Private source of truth (may contain personal paths/IDs):
-- `~/.cursor/commands/eod.md` (and sibling commands)
-- Optionally `~/.claude/commands/` if that copy leads
+- `~/.claude/commands/eod.md` (and sibling commands) — the scripts' default
+- Override with `LOCAL_COMMANDS_DIR` if your own source lives elsewhere
 
 Published skills live in `skills/` with `YOUR_*` placeholders.
 
 ```bash
-# See whether local Cursor commands drifted from published skills
+# See whether local commands drifted from published skills
 ./scripts/check-drift.sh
 
-# Re-sanitize from local Cursor commands into skills/ (review the diff!)
+# Re-sanitize from local commands into skills/ (review the diff!)
 ./scripts/sync-from-local.sh
 # then: add a CHANGELOG.md entry for the new date, bump VERSION date, commit, and
-# cut a GitHub release tagged v<date> with that CHANGELOG entry as the notes:
-#   gh release create "v$(cat VERSION | head -1)" -t "$(cat VERSION | head -1)" -F <changelog-entry>
+# cut a GitHub release with that CHANGELOG entry as the notes. Note the format
+# shift: dates in VERSION/CHANGELOG are dashed, tags are dot-separated.
+#   TAG="v$(head -1 VERSION | tr '-' '.')"
+#   gh release create "$TAG" -t "$TAG" -F <changelog-entry>
 ```
 
 `check-drift.sh` normalizes personal vault paths, email, and Slack IDs to placeholders before diffing, so noise is mostly real instruction changes.
 
-> **Note (2026-08-20):** `~/.claude/commands/` is now the source of truth and the scripts' default — the author has moved off Cursor. `~/.cursor/commands/` is stale and no longer synced from; delete it or ignore it. Override with `LOCAL_COMMANDS_DIR` only if your own source lives elsewhere.
+> **Note (2026-08-20):** the default flipped from `~/.cursor/commands/` to `~/.claude/commands/` — the author has moved off Cursor. Any `~/.cursor/commands/` copy is stale and no longer synced from; delete it or ignore it.
 
 ## Adopter
 
