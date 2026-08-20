@@ -38,4 +38,6 @@ Steps:
 
 4. Insert `## Morning` after the `# [title]` heading and before `## Remember & Action Items` (or other body sections). If the note does not exist yet, create it with Morning only.
 
-5. Report what was written — Project status line, Commitments count + Open tasks row count (show the checklist in chat) + reminder triage (what was filed to the reading list / flagged). Say "all clear" if every Morning category is empty.
+4b. **Verify it landed.** Re-read today's note *from disk* and confirm the `## Morning` heading is present. If it isn't, write it again and re-read. Never report success without reading it back — the equivalent step in `/eod` (10b) exists because three runs reported a seeded day that had no Morning section on disk.
+
+5. Report what was written — Project status line, Commitments count + Open tasks row count (show the checklist in chat) + reminder triage (what was filed to the reading list / flagged) + confirmation that `## Morning` was read back. Say "all clear" if every Morning category is empty. **Ask nothing and wait for nothing** — this command runs at the start of the day to orient, not to open a conversation. Weekly/monthly follow-ups belong to `/eod` Part C.

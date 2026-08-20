@@ -79,11 +79,26 @@ When proposing lines from the session, `## Learning`, or a meeting transcript (i
    - Format each item `- [ ] **[TICKET](url)** — Todo/Blocked[, reason if blocked] → pick up / unblock / reassign`.
    - Also mirror this checklist in the chat report (step 14).
 
-5b. **Growth / revise (optional, 30 seconds):** Using the Growth lens above + today’s `## Learning` + this session + the transcripts from step 4 (work and skipped-social alike) for communication/delivery moments + a skim of the **YOUR_CAREER_SLACK_CHANNEL** Slack channel (private, ID `YOUR_CAREER_SLACK_CHANNEL_ID`) since the last EOD (fall back to the past week) for any career highlight the user or their manager flagged there:
-   - If there’s a real growth moment, add under EOD: `**Growth:** …` (one line; congratulate specifically — name the judgment, not “good job”)
-   - If there’s a real miss worth course-correcting, add: `**Revise:** …` (one line — what to try differently, not self-attack)
-   - A communication moment from a transcript (audience calibration, went too technical too early, landed a message well) counts as either — file it under Growth or Revise, don’t add a third category.
-   - Prefer proposing 0–2 candidate lines in chat for the user to confirm/edit/skip, then write what they approve. If nothing fits, omit both lines — silence is correct.
+5b. **Growth / Revise — write, don’t ask.**
+
+   *Changed 2026-08-20: this step no longer proposes candidates and waits for approval, and it leads with signals that can be **checked** rather than inferred. Over nine EOD runs the propose-and-confirm version produced 2 Growth lines and 0 Revise lines — the approval gate, not a lack of material, was the problem. Write the line; the user edits the note if it’s wrong.*
+
+   **First, the countable signals** — these come from data, not judgment:
+
+   - **Recurring Open task** — scan the `### Open tasks` checklist in the last 5 daily notes carrying an `## EOD`. A ticket appearing 3+ times is a deferred papercut:
+     `**Revise:** SCALE-123 has ridden Open tasks 4 EODs — pick it up, hand it off, or close it.`
+   - **Clean landing after churn** — a PR merged today with no change requests, in an area where a previous PR needed them. Real, checkable Growth.
+   - **Review churn** — a PR merged today that took 2+ rounds of change requests (`gh pr view <n> --json reviews`). Revise only if the rounds were about something knowable up front.
+   - **Backward movement** — a ticket that moved In Review → In Progress today.
+
+   **Then, only if no countable signal fired,** use the Growth lens above against today’s session, `## Learning`, and step 4’s transcripts (work and skipped-social alike). Cap: one line total.
+
+   **Writing rules:**
+   - At most one `**Growth:**` and one `**Revise:**` per day. Usually zero or one line.
+   - Name the specific judgment or the specific next action, never “good work today.”
+   - A communication moment from a transcript counts as either — never a third category.
+   - **Never fabricate.** A quiet day gets no line. Silence is correct output, not a failed step.
+   - **YOUR_CAREER_SLACK_CHANNEL** (private, `YOUR_CAREER_SLACK_CHANNEL_ID`): skim since the last EOD only to *corroborate* a signal that already fired. Not every run — nine runs of skimming produced almost nothing.
 
 6. Also append the shipped items to `YOUR_VAULT_PATH/Career/Shipped.md` under today’s date (same format as /log-shipped). If a section for today already exists, append to it.
 
@@ -101,7 +116,7 @@ When proposing lines from the session, `## Learning`, or a meeting transcript (i
       - **Fallback:** If no `## EOD` or `## Morning` exists in the last ~14 days of notes, sweep the last **5 calendar days** through today — do **not** fall back to "today only." The user will sometimes skip `/eod` for a day or two; the window must absorb that without being prompted.
       - **Skip** any message that is a scheduled nudge (contains any of: "End of day nudge", "Good morning", "Run `/morning`", "Run `/eod`", "Anything in Slack today", "Forward" + "reminders-channel name", "End of week nudge", "weekly-wins", "First Friday", "`/my-story`", or "Sent using"). These are channel noise, not commitments.
       - **Triage each remaining item** (these are things the user forwarded as reminders to themselves) into one of four buckets and act:
-        - **Reading link** ("link i want to read", "add to links I read", a bare article/repo/RFC URL): file it into `YOUR_VAULT_PATH/Links I want to read.md` under the best-fit `## Category` heading (that file is already bucketed — e.g. AI & Agents, Work: Honeycomb Internal, Frontend & Design Systems, Learning, Interesting Reads). Create a new `## Category` only if none fits. Entry format: `- [Title](url) — one-line what-it-is`. This is low-stakes and reversible, so file it directly; then list what you filed in the report. Do **not** put reading links in the daily note.
+        - **Reading link** ("link i want to read", "add to links I read", a bare article/repo/RFC URL): file it into `YOUR_VAULT_PATH/Links I want to read.md` under the best-fit `## Category` heading (that file is already bucketed — e.g. AI & Agents, Work: YOUR_ORG Internal, Frontend & Design Systems, Learning, Interesting Reads). Create a new `## Category` only if none fits. Entry format: `- [Title](url) — one-line what-it-is`. This is low-stakes and reversible, so file it directly; then list what you filed in the report. Do **not** put reading links in the daily note.
         - **Commitment / follow-up / dated obligation** ("follow up on this", "implement this soon", "loop back to X", a due date): carry into the seed as a checkbox under **Commitments**. If it clearly warrants a Linear ticket, *propose* creating one in the report — do not auto-create.
         - **Expense** ("expense this" + receipt/image): surface it as an action in the report with the receipt reference; do not auto-do it.
         - **FYI / feedback to keep** ("great feedback from X", something to remember): note it briefly in the report; don’t clutter the task list.
@@ -129,39 +144,42 @@ When proposing lines from the session, `## Learning`, or a meeting transcript (i
 
 10. If the next-workday note already existed with other sections (Learning, etc.), insert Morning after the title heading without wiping the rest.
 
+10b. **Verify the seed landed — do not skip this.** Re-read the next workday's note *from disk* and confirm a `## Morning` heading is actually present. Never report a day as seeded without reading it back.
+   - If the section is missing, write it again, then re-read again.
+   - If it is still missing after the retry, say so loudly at the top of the report — a silently unseeded day is the failure mode that breaks the whole chain, because the next morning opens blank and `/morning` has to be remembered.
+   - **Why this exists:** three EOD runs in Aug 2026 (03-08, 04-08, 05-08) completed and reported success while the following day's note had no `## Morning` section at all. Nothing caught it, and the misses were only visible weeks later by counting headings across the vault.
+
 ---
 
-## Part C — Story prompts (prompt only, do not auto-run)
+## Part C — Optional follow-ups (never blocking)
 
-11. **Weekly wins** — Check `YOUR_VAULT_PATH/Career/Weekly Wins.md`. **Never run `/weekly-wins` unless the user says yes.**
-   - **Friday (or Sat/Sun if they wrap then):** Let `this_monday` = Monday of the current week. If `## Week of YYYY-MM-DD` for `this_monday` is missing, ask once: "This week's Weekly Wins isn't written yet — want me to run `/weekly-wins` before you go?"
-   - **Monday:** Let `prior_monday` = today minus 7 days. If `## Week of YYYY-MM-DD` for `prior_monday` is missing, ask once: "Last week (Week of YYYY-MM-DD) has no Weekly Wins — want me to run `/weekly-wins` for that week?"
-   - **Tue–Thu:** Skip unless the user asks.
-   - If the section already exists, say nothing about weekly-wins.
+**By this point the note is written and the ritual is complete.** Part C asks nothing and waits for nothing. Compute which follow-ups are *due*, list them as a single line at the end of the report, and end the turn. The user runs what they want. An ignored menu is a successful EOD — leaving is the point.
 
-12. **My Story (monthly)** — Read `YOUR_VAULT_PATH/Career/My Story.md` for the last chapter’s end month. **Never run `/my-story` unless the user says yes.**
-   - **First Friday of the month** (Friday with day-of-month 1–7), or **first Monday** if that Friday was missed: if no new chapter has been added since the previous calendar month ended, ask once: "My Story hasn't been updated this month — want me to run `/my-story`?"
-   - Otherwise stay quiet.
+Never auto-run any of these. Keep their output OUT of `Weekly Wins.md`.
 
-13. **YOUR_CAREER_SLACK_CHANNEL (Friday only, once):** Ask once: "Anything from this week worth dropping in YOUR_CAREER_SLACK_CHANNEL (praise, hard call, ownership moment)?" If no, move on. Do not draft a Slack post unless they ask.
+11. **Weekly wins** (`/weekly-wins`) — check `YOUR_VAULT_PATH/Career/Weekly Wins.md`.
+   - **Fri/Sat/Sun:** due if `## Week of YYYY-MM-DD` for *this* Monday is missing.
+   - **Monday:** due if `## Week of YYYY-MM-DD` for the *prior* Monday is missing.
+   - **Tue–Thu:** never due.
 
-13b. **Weekly Skill Coach + Team-Update Blurb (prompt only — do not auto-run; keep their output OUT of Weekly Wins.md).** Both are Fri-weighted efficiency prompts, siblings to weekly-wins. Both live in Cursor (`~/.cursor/skills/`).
-   - **Friday (or Thu when the Scale Weekly Update draft posts):**
-     - "Want me to run the **weekly skill coach** before you go? (surveys the week → friction log + 1–3 skill pitches)"
-     - "Want a **team-update blurb** for the Scale Weekly Update? (paste-ready line from your merged PRs + closed tickets)"
-   - **Monday:** "Want me to run the **weekly skill coach** for the past week?" (skip the team-update blurb Mondays — the update already shipped)
-   - **Tue–Thu:** skip unless the user asks. If either was already run this week (Fri→Mon), don't re-ask.
-   - Never run either automatically; only the user's yes triggers them.
+12. **My Story** (`/my-story`) — read `YOUR_VAULT_PATH/Career/My Story.md` for the last chapter's end month. Due on the **first Friday of the month** (day-of-month 1–7), or the **first Monday** if that Friday was missed, when no chapter has been added since the previous calendar month ended. Otherwise not due.
+
+13. **YOUR_CAREER_SLACK_CHANNEL** — due **Fridays only**: a reminder that anything from the week worth dropping there (praise, hard call, ownership moment) hasn't been. Never draft a Slack post unless asked.
+
+13b. **Weekly skill coach / team-update blurb** — optional efficiency siblings; never auto-run.
+   - `/weekly-skill-coach` — due **Friday or Monday**. Surveys the week, produces a friction log and 1–3 automation pitches.
+   - `/team-update-blurb` — due **Thu/Fri**, when the YOUR_TEAM_UPDATE_NAME draft posts. Never due Monday; the update already shipped.
+   - If either already ran this week (Fri→Mon), not due.
 
 ---
 
 ## Report
 
-14. Report briefly:
+14. Report briefly. **Ask nothing. Wait for nothing.** End the turn when the report is printed — the user is trying to leave.
     - Today’s EOD summary + any meetings caught up (call out anything skipped as social-but-logged-under-Growth)
     - **Open tasks checklist** (same content as the note — scannable in chat)
     - **Project status** line
     - **Reminder triage** (from step 8c): what was filed to the reading list, what became a Commitment, what’s proposed as a ticket, and any expense to handle — or “nothing new”
     - Growth / Revise lines written (or “none — nothing forced”)
-    - Next workday date seeded (or “already seeded”) + counts for Commitments / Open tasks rows
-    - Prompt status: weekly-wins / my-story / weekly-skill-coach / team-update-blurb / career-channel (asked / already done / skipped) — **stop for an answer if you asked anything**
+    - **Seed confirmation** (from 10b): next workday date + that `## Morning` was read back from disk — or a loud warning if it wasn’t. “Already seeded” is fine, unverified is not.
+    - **Optional follow-ups:** one line listing only what Part C found *due*, as bare commands — e.g. `Optional: /weekly-wins · /team-update-blurb`. Omit the line entirely when nothing is due. No questions, no explanations of what each does.
