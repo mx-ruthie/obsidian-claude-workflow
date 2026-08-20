@@ -126,6 +126,11 @@ Missing pieces are fine — tell the agent what to strip or swap ([`docs/TWEAK.m
 | `YOUR_SLACK_USER_ID` | Your Slack member ID |
 | `YOUR_CAREER_SLACK_CHANNEL` | Optional |
 | `YOUR_CAREER_SLACK_CHANNEL_ID` | Optional |
+| `YOUR_ORG` | Optional — employer name, stripped where it appears in prose (e.g. a reading-list category) |
+| `YOUR_REPO` | Optional — your main repo's name |
+| `YOUR_TEAM_UPDATE_NAME` | Optional — a named weekly team ritual, e.g. `Platform Weekly Update` |
+| `YOUR_TEAM_CHANNEL` | Optional — where that update is drafted |
+| `YOUR_TEAM_UPDATE_DEST` | Optional — where it ships to |
 
 `scripts/install.sh` substitutes these into skills before copying to `~/.claude/commands` and/or `~/.cursor/commands`.
 
