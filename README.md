@@ -79,12 +79,13 @@ Then one weekday ~5pm nudge: `Run /eod`.
 
 | Command | Role |
 |---|---|
-| `/eod` | **The daily ritual** — close today, optional Growth/Revise, update `Shipped.md`, seed next workday, prompt (don't auto-run) weekly/monthly |
+| `/eod` | **The daily ritual** — close today, optional Growth/Revise, update `Shipped.md`, seed next workday, then list (never ask) what's due weekly/monthly |
 | `/morning` | Catch-up only if today's Morning is missing |
 | `/log-this` | Drop a Notion/Linear link into today's note |
 | `/log-shipped` | Write shipped items without a full EOD |
 | `/weekly-wins` | Friday story seeds from Shipped + growth crumbs |
 | `/my-story` | Monthly narrative chapter from career channel + evidence |
+| `/weekly-skill-coach` | Friday/Monday efficiency audit — friction log + 1–3 automation pitches |
 
 Obsidian starters install into your vault **only if those files don't already exist**.
 
@@ -93,10 +94,10 @@ Obsidian starters install into your vault **only if those files don't already ex
 ## Shape of a day
 
 ```
-Last night's /eod  →  tomorrow already has Focus + Morning
-Morning            →  open note, set Focus, glance
+Last night's /eod  →  tomorrow already has Morning (Project, Commitments, Open tasks)
+Morning            →  open note and glance; /morning only if last night's /eod was skipped
 During day         →  forward Slack yeses (or your capture habit); optional /log-this
-~5pm               →  /eod once
+~5pm               →  /eod once — it writes, reports, and lets you leave
 ```
 
 ---
@@ -133,7 +134,7 @@ Missing pieces are fine — tell the agent what to strip or swap ([`docs/TWEAK.m
 ## Maintainer: keep the public skills honest
 
 ```bash
-./scripts/check-drift.sh      # local Cursor commands vs skills/ (normalized)
+./scripts/check-drift.sh      # local commands vs skills/ (normalized)
 ./scripts/sync-from-local.sh  # re-sanitize local → skills/, bump VERSION date
 # then: add a CHANGELOG.md entry, commit, and cut a date-tagged release:
 gh release create "v$(head -1 VERSION)" -t "$(head -1 VERSION)" -F <changelog-entry>

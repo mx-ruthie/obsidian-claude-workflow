@@ -1,4 +1,4 @@
-2026-08-12
+2026-08-20
 
 # Version / sync
 
@@ -25,7 +25,7 @@ Published skills live in `skills/` with `YOUR_*` placeholders.
 
 `check-drift.sh` normalizes personal vault paths, email, and Slack IDs to placeholders before diffing, so noise is mostly real instruction changes.
 
-> **Note (2026-07-21):** the `~/.claude/commands/` copy currently leads (it carries the changes above). Run drift/sync with `LOCAL_COMMANDS_DIR=$HOME/.claude/commands`, or keep the Cursor copy in step with it, before trusting the default Cursor-sourced sync.
+> **Note (2026-08-20):** `~/.claude/commands/` is now the source of truth and the scripts' default — the author has moved off Cursor. `~/.cursor/commands/` is stale and no longer synced from; delete it or ignore it. Override with `LOCAL_COMMANDS_DIR` only if your own source lives elsewhere.
 
 ## Adopter
 
