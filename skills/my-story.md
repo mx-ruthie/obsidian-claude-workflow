@@ -22,7 +22,7 @@ Steps:
    - Narrative prose — no bullet points, no headers within the chapter
    - Lead with the human story; use PRs as evidence not as a list
    - Chapter title format: `## Chapter N: [Theme] *(Month – Month Year)*`
-   - Honest about gaps, uncertainty, misses that led to a revised approach, and what the person is still developing toward
+   - Honest about gaps, uncertainty, misses that led to a revised approach, and what the user is still developing toward
 
 5. Append the new chapter to `My Story.md`, before the `## Visualizing the Arc` section. Update the mermaid timeline with 2-3 key moments from the new chapter.
 
